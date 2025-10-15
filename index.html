@@ -2,171 +2,250 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GroomEase</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f8f3e9;
-            color: #333;
-        }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GroomEase - Professional Grooming</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-        /* NAVBAR */
-        .navbar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            height: 55px;
-            padding: 15px 60px;
-            background: white;
-            border-bottom: 1px solid #ddd;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 22px;
-            font-weight: bold;
-        }
-
-        .logo-icon {
-            width: 35px;
-            height: 35px;
-            background: #7b4b2a;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 8px;
-            font-size: 18px;
-        }
-
-        .subtext {
-            font-size: 14px;
-            color: gray;
-            margin-top: -5px;
-        }
-
-        .nav-actions {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .btn {
-            padding: 8px 20px;
-            border-radius: 6px;
-            border: none;
-            cursor: pointer;
-            font-size: 15px;
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 1px solid #555;
-        }
-
-        .btn-primary {
-            background: #7b4b2a;
-            color: white;
-        }
-
-        /* HEADER IMAGE */
-        .header-img {
-            width: 100%;
-            height: 350px;
-            object-fit: cover;
-            display: block;
-        }
-
-        /* STEP INDICATOR */
-        .steps {
-            text-align: center;
-            margin: 30px 0;
-            font-size: 20px;
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-        }
-
-        .step {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid #aaa;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .active {
-            background: #7b4b2a;
-            color: white;
-            border-color: #7b4b2a;
-        }
-
-        /* CONTENT SECTION */
-        .content {
-            text-align: center;
-            padding: 20px;
-        }
-
-        h1 {
-            margin: 0;
-            font-size: 35px;
-        }
-
-        p {
-            margin-top: 10px;
-            color: #555;
-            font-size: 16px;
-        }
-    </style>
 </head>
 
 <body>
 
-    <!-- NAVBAR -->
-    <nav class="navbar">
-        <div>
-            <div class="logo">
-                <div class="logo-icon">✂</div>
-                GroomEase
-            </div>
-            <div class="subtext">Professional grooming services</div>
-        </div>
-
-        <div class="nav-actions">
-            <button class="btn btn-outline">Products</button>
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="logo"><span>✂</span> GroomEase</div>
+        <div class="nav-links">
+            <a href="#"><span class="material-symbols-outlined">
+                    shopping_cart
+                </span>Products</a>
             <button class="btn btn-outline">Sign In</button>
             <button class="btn btn-primary">Sign Up</button>
         </div>
-    </nav>
-
-    <!-- HEADER IMAGE -->
-    <img class="header-img" src="background.jpg" alt="Barbershop" />
-
-    <!-- STEPS -->
-    <div class="steps">
-        <div class="step active">1</div>
-        <div class="step">2</div>
-        <div class="step">3</div>
-        <div class="step">4</div>
     </div>
 
-    <!-- CONTENT -->
-    <div class="content">
-        <h1>Choose Your Service</h1>
-        <p>Select the service you'd like to book</p>
-    </div>
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-text">
+            <h1>Premium<br>Grooming Services</h1>
+            <p>
+                Experience the perfect blend of traditional barbering excellence and modern convenience.
+                Book your appointment online and enjoy professional grooming services tailored to your style.
+            </p>
+            <div class="hero-buttons">
+                <button class="btn btn-primary">Book Appointment →</button>
+                <button class="btn btn-outline">Shop Products</button>
+            </div>
+        </div>
+        <img src="images/forntpic.jpeg" alt="Barber Shop">
+    </section>
+
+
+    <!-- Our Services -->
+    <section class="services-section" id="services">
+        <h2>Our Services</h2>
+        <p>Professional grooming services for the modern gentleman</p>
+
+        <div class="services-container">
+            <!-- Card 1 -->
+            <div class="service-card">
+                <img src="https://images.pexels.com/photos/3998429/pexels-photo-3998429.jpeg" alt="Classic Haircut">
+                <div class="service-info">
+                    <span class="service-title">Classic Haircut</span>
+                    <span class="service-price">₹800</span>
+                    <br>
+                    <span class="service-time">30 minutes</span>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="service-card">
+                <img src="https://images.pexels.com/photos/1813272/pexels-photo-1813272.jpeg" alt="Beard Trim">
+                <div class="service-info">
+                    <span class="service-title">Beard Trim</span>
+                    <span class="service-price">₹500</span>
+                    <br>
+                    <span class="service-time">20 minutes</span>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="service-card">
+                <img src="https://images.pexels.com/photos/3998428/pexels-photo-3998428.jpeg" alt="Cut & Beard Combo">
+                <div class="service-info">
+                    <span class="service-title">Cut & Beard Combo</span>
+                    <span class="service-price">₹1,000</span>
+                    <br>
+                    <span class="service-time">45 minutes</span>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="btn-center">
+            <button class="btn-book">View All Services & Book Now</button>
+        </div>
+    </section>
+
+    <!-- Why choose us -->
+    <section class="whychooseus">
+        <h1>Why Choose GroomEase?</h1>
+        <p>Experience the perfect blend of traditional barbering excellence and modern convenience.</p>
+
+        <div class="why-container">
+            <!-- Card 1 -->
+            <div class="why-card">
+                <div class="icon-circle">
+                    <span class="material-symbols-outlined">workspace_premium</span>
+                </div>
+                <div class="why-title">Expert Barbers</div>
+                <div class="why-text">
+                    Skilled professionals with years of experience in classic and modern styles
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="why-card">
+                <div class="icon-circle">
+                    <span class="material-symbols-outlined">star_shine</span>
+                </div>
+                <div class="why-title">Premium Products</div>
+                <div class="why-text">
+                    High-quality grooming products for professional results at home
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="why-card">
+                <div class="icon-circle">
+                    <span class="material-symbols-outlined">event_available</span>
+                </div>
+                <div class="why-title">Easy Booking</div>
+                <div class="why-text">
+                    Book appointments online 24/7 with instant confirmation
+                </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="why-card">
+                <div class="icon-circle">
+                    <span class="material-symbols-outlined">group</span>
+                </div>
+                <div class="why-title">Customer First</div>
+                <div class="why-text">
+                    Personalized service tailored to your unique style and preferences
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- about section -->
+    <section class="about-section">
+        <div class="about-content">
+            <div class="about-text">
+                <h2>About GroomEase</h2>
+                <p>
+                    Founded with a passion for traditional barbering and modern grooming,
+                    GroomEase has been serving the community with exceptional haircuts,
+                    beard trims, and grooming services. Our team of skilled barbers
+                    combines time-honored techniques with contemporary styles to deliver
+                    the perfect look for every client.
+                </p>
+                <p>
+                    We believe that grooming is more than just a service—it's an experience.
+                    From the moment you walk through our doors or book online, we're
+                    committed to providing you with personalized attention, expert advice,
+                    and results that exceed your expectations.
+                </p>
+
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="icon"><span class="material-symbols-outlined">
+                                social_leaderboard
+                            </span></div>
+                        <div>
+                            <h4>5+ Years</h4>
+                            <p>Experience</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="about-image">
+                <img src="images/background.jpg" alt="Barbershop interior">
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+
+    <footer class="footer">
+        <div class="footer-container">
+            <!-- Logo and Description -->
+            <div class="footer-col">
+                <div class="footer-logo">
+                    <div class="logo-icon">✂</div>
+                    <h2>GroomEase</h2>
+                </div>
+                <p>
+                    Your trusted destination for professional<br>
+                    grooming services and premium products.
+                </p>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="footer-col">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#hero">Book Appointment</a></li>
+                    <li><a href="#services">Our Services</a></li>
+                    <li><a href="#">Shop Products</a></li>
+                    <li><a href="#">Admin Login</a></li>
+                </ul>
+            </div>
+
+            <!-- Contact Us -->
+            <div class="footer-col">
+                <h3>Contact Us</h3>
+                <ul class="contact-info">
+                    <li><span class="material-symbols-outlined">
+                            location_on
+                        </span>Dakshinkali-1, Khahare</li>
+                    <li><span class="material-symbols-outlined">
+                            call
+                        </span>9878684818</li>
+                    <li><span class="material-symbols-outlined">
+                            mail
+                        </span>info@groomease.com</li>
+                </ul>
+            </div>
+
+            <!-- Follow Us -->
+            <div class="footer-col">
+                <h3>Follow Us</h3>
+                <div class="social-icons">
+                    <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="#"><i class="fa-brands fa-square-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
+                </div>
+
+                <div class="hours">
+                    <h4>Opening Hours</h4>
+                    <p>Sun - Sat:  6:00 AM - 8:00 PM<br>Open 7 days a week</p>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+        <div class="footer-bottom">
+            <p>&copy; 2025 GroomEase. All rights reserved.</p>
+        </div>
+    </footer>
+
 
 </body>
 
