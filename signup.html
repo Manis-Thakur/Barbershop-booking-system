@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Account | GroomEase</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+    <style>
+        /* Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family:  "Segoe UI", sans-serif;
+        }
+
+        /* Background */
+        body {
+            background-color: #faf7f1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Card Container */
+        .signup-container {
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+        }
+
+        .signup-card {
+            background-color: #fffaf3;
+            border-radius: 12px;
+            padding: 40px 35px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        /* Logo */
+        .logo {
+            background-color: #5b2b0c;
+            color: white;
+            width: 50px;
+            height: 50px;
+            margin: 0 auto 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            font-size: 22px;
+        }
+
+        /* Headings */
+        h2 {
+            color: #2a1a0f;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            color: #665c53;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        /* Labels and Inputs */
+        label {
+            display: block;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 6px;
+            color: #3a2c20;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #e0d9d2;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        input:focus {
+            border-color: #8b4513;
+        }
+
+        /* Password Field */
+        .password-field {
+            position: relative;
+        }
+
+        .password-field .toggle {
+            font-size: 20px;
+            position: absolute;
+            right: 10px;
+            top: 9px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        /* Button */
+        .btn {
+            width: 100%;
+            background-color: #5b2b0c;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 15px;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #4a2108;
+        }
+
+        /* Login Redirect */
+        .login-text {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #5a4c3e;
+        }
+
+        .login-text a {
+            color: #5b2b0c;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .login-text a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .signup-card {
+                padding: 30px 25px;
+            }
+
+            h2 {
+                font-size: 22px;
+            }
+
+            .subtitle {
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="signup-container">
+        <div class="signup-card">
+            <div class="logo">✂</div>
+            <h2>Create Account</h2>
+            <p class="subtitle">
+                Join GroomEase to book appointments and track your grooming journey
+            </p>
+
+            <form action="register.php" method="POST">
+                <label for="fullname">Full Name</label>
+                <input type="text" id="fullname" name="fullname" placeholder="Enter your full name" required />
+
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required />
+
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required />
+
+                <label for="password">Password</label>
+                <div class="password-field">
+                    <input type="password" id="password" name="password" placeholder="Create a password" required />
+                    <span class="material-symbols-outlined toggle">
+                        visibility
+                    </span>
+                </div>
+
+                <label for="confirm">Confirm Password</label>
+                <input type="password" id="confirm" name="confirm" placeholder="Confirm your password" required />
+
+                <button type="submit" class="btn">Create Account</button>
+            </form>
+
+            <p class="login-text">
+                Already have an account? <a href="login.html">Sign in here</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Show/Hide password toggle
+        const toggle = document.querySelector('.toggle');
+        const password = document.querySelector('#password');
+        toggle.addEventListener('click', () => {
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+        });
+    </script>
+</body>
+
+</html>

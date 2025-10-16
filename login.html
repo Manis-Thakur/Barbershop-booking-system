@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | GroomEase</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+    <style>
+        /* Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", sans-serif;
+            ;
+        }
+
+        /* Background */
+        body {
+            background-color: #faf6ef;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Card Container */
+        .login-container {
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+        }
+
+        .login-card {
+            background-color: #fffaf3;
+            border-radius: 12px;
+            padding: 40px 35px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        /* Logo */
+        .logo {
+            background-color: #5b2b0c;
+            color: white;
+            width: 50px;
+            height: 50px;
+            margin: 0 auto 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            font-size: 22px;
+        }
+
+        /* Headings */
+        h2 {
+            color: #2a1a0f;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            color: #665c53;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        /* Labels and Inputs */
+        label {
+            display: block;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 6px;
+            color: #3a2c20;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #e0d9d2;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #8b4513;
+        }
+
+        /* Password Field with Toggle Icon */
+        .password-field {
+            position: relative;
+        }
+
+        .password-field .toggle {
+            font-size: 20px;
+            position: absolute;
+            right: 10px;
+            top: 9px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        /* Button */
+        .btn {
+            width: 100%;
+            background-color: #5b2b0c;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 15px;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #4a2108;
+        }
+
+        /* Register Link */
+        .register-text {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #5a4c3e;
+        }
+
+        .register-text a {
+            color: #5b2b0c;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        hr {
+            margin: 20px 0;
+            border: none;
+            border-top: 1px solid #ddd0c7;
+        }
+
+        /* Admin Section */
+        .admin-login p {
+            color: #5a4c3e;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .admin-btn {
+            display: inline-block;
+            padding: 8px 18px;
+            background-color: #fff6ea;
+            border: 1px solid #d2bba2;
+            color: #3c1f0b;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .admin-btn:hover {
+            background-color: #ffe5c2;
+        }
+
+        /* Back to Home */
+        .back-home {
+            display: block;
+            margin-top: 15px;
+            text-decoration: none;
+            color: #4a2a12;
+            font-size: 14px;
+        }
+
+        .register-text a:hover,
+        .back-home:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-container"> 
+        <div class="login-card">
+            <div class="logo">✂</div>
+            <h2>Welcome Back</h2>
+            <p class="subtitle">
+                Sign in to your GroomEase account to book appointments and manage your profile
+            </p>
+
+            <form action="login.php" method="POST">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+                <label for="password">Password</label>
+                <div class="password-field">
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                    <span class="material-symbols-outlined toggle">
+                        visibility
+                    </span>
+                </div>
+
+                <button type="submit" class="btn">Sign In</button>
+            </form>
+
+            <p class="register-text">
+                Don't have an account? <a href="#">Create one here</a>
+            </p>
+
+            <hr>
+
+            <div class="admin-login">
+                <p>Staff Login:</p>
+                <a href="admin-login.html" class="admin-btn">Admin Dashboard</a>
+            </div>
+
+            <a href="index.html" class="back-home">← Back to Home</a>
+        </div>
+    </div>
+
+        <script>
+        // Show/Hide password toggle
+        const toggle = document.querySelector('.toggle');
+        const password = document.querySelector('#password');
+        toggle.addEventListener('click', () => {
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+        });
+    </script>
+
+</body>
+
+</html>

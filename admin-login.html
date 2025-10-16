@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Login | GroomEase</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+    <style>
+        /* Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family:  "Segoe UI", sans-serif;
+        }
+
+        /* Background */
+        body {
+            background-color: #faf7f1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Card Container */
+        .admin-container {
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+        }
+
+        .admin-card {
+            background-color: #fffaf3;
+            border-radius: 12px;
+            padding: 40px 35px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        /* Logo */
+        .logo {
+            background-color: #5b2b0c;
+            color: white;
+            width: 50px;
+            height: 50px;
+            margin: 0 auto 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            font-size: 22px;
+        }
+
+        /* Heading */
+        h2 {
+            color: #2a1a0f;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            color: #665c53;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        /* Labels and Inputs */
+        label {
+            display: block;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 6px;
+            color: #3a2c20;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #e0d9d2;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        input:focus {
+            border-color: #8b4513;
+        }
+
+        /* Password Field */
+        .password-field {
+            position: relative;
+        }
+
+        .password-field .toggle {
+            font-size: 20px;
+            position: absolute;
+            right: 10px;
+            top: 9px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        /* Button */
+        .btn {
+            width: 100%;
+            background-color: #5b2b0c;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 15px;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #4a2108;
+        }
+
+        /* Back Link */
+        .back-link {
+            display: block;
+            margin-top: 20px;
+            color: #4a2a12;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .admin-card {
+                padding: 30px 25px;
+            }
+
+            h2 {
+                font-size: 22px;
+            }
+
+            .subtitle {
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="admin-container">
+        <div class="admin-card">
+            <div class="logo">✂</div>
+            <h2>Admin Login</h2>
+            <p class="subtitle">
+                Sign in to access the GroomEase admin dashboard
+            </p>
+
+            <form action="admin-dashboard.php" method="POST">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="admin@groomease.com" required />
+
+                <label for="password">Password</label>
+                <div class="password-field">
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required />
+                    <span class="material-symbols-outlined toggle">
+                        visibility
+                    </span>
+                </div>
+
+                <button type="submit" class="btn">Sign In</button>
+            </form>
+
+            <a href="index.html" class="back-link">← Back to Customer Site</a>
+        </div>
+    </div>
+
+    <script>
+        // Show/Hide password
+        const toggle = document.querySelector(".toggle");
+        const password = document.querySelector("#password");
+
+        toggle.addEventListener("click", () => {
+            const type = password.getAttribute("type") === "password" ? "text" : "password";
+            password.setAttribute("type", type);
+        });
+    </script>
+</body>
+
+</html>
