@@ -75,6 +75,7 @@ body {
 .btn-outline {
     background: #faf6ef;
     border: 1px solid #f1d5a3;
+    text-decoration: none;
 }
 
 .nav-links a:hover,
@@ -87,6 +88,7 @@ body {
 .btn-primary {
     background: #5c2e00;
     color: #fff;
+    text-decoration: none;
 }
 
 .btn-primary:hover {
