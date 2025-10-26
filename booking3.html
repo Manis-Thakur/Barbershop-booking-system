@@ -298,7 +298,7 @@
 
     <div class="buttons">
         <a href="booking2.html" class="back-btn">Back to Barbers</a>
-        <a href="payment.html" class="continue-btn">Continue to Booking</a>
+        <a id="continueBtn" class="continue-btn">Continue to Booking</a>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
@@ -342,6 +342,14 @@
         // === Display Selection ===
         function updateSelectedInfo() {
             const info = document.getElementById("selectedInfo");
+
+            if (selectedDate) {
+                localStorage.setItem("bookingDate", selectedDate);
+            }
+            if (selectedTime) {
+                localStorage.setItem("bookingTime", selectedTime);
+            }
+
             if (selectedDate && selectedTime) {
                 info.textContent = `Selected: ${selectedDate} at ${selectedTime}`;
             } else if (selectedDate) {
@@ -352,6 +360,16 @@
                 info.textContent = "No date/time selected";
             }
         }
+
+        // === Continue Button Logic ===
+        document.getElementById("continueBtn").addEventListener("click", () => {
+            if (!selectedDate || !selectedTime) {
+                alert("Please select both a date and time to continue.");
+                return;
+            }
+            window.location.href = "payment.html";
+        });
+
     </script>
 
 </body>

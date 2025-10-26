@@ -4,14 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment</title>
+    <title>Your Information</title>
 
     <style>
         body {
             font-family: 'Segoe UI', sans-serif;
             background: #faf6ef;
             margin: 0;
-            padding-bottom: 50px;
         }
 
 
@@ -68,88 +67,71 @@
             color: #fff;
         }
 
-        h1 {
-            text-align: center;
-            margin-top: 40px;
-            font-size: 32px;
-        }
-
-        p.subtitle {
-            text-align: center;
-            color: #6e6a64;
-            margin-bottom: 35px;
-        }
-
-        .payment-cards {
-            display: flex;
-            justify-content: center;
-            gap: 25px;
-            margin-bottom: 35px;
-        }
-
-        .card {
-            width: 210px;
-            padding: 20px;
-            background: #fff;
-            border-radius: 12px;
-            text-align: center;
-            border: 2px solid #e4d9ca;
-        }
-
-        .card.active {
-            background: #f0e3d4;
-            border-color: #70401b;
-        }
-
-        .card h3 {
-            font-size: 15px;
-            margin: 0;
-            color: #4d3828;
-        }
-
-        .card .amount {
-            font-size: 28px;
-            font-weight: bold;
-            margin-top: 10px;
-            color: #000;
-        }
-
-        .card .small-text {
-            font-size: 13px;
-            color: #6e6a64;
-        }
-
         .container {
             width: 700px;
             max-width: 90%;
+            margin: 60px auto;
             background: #fff;
-            padding: 25px;
-            margin: auto;
+            padding: 30px;
             border-radius: 15px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
         }
 
-        .section-title {
+        .step-indicator {
             display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .step {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #623817;
+            color: #fff;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
             align-items: center;
-            font-weight: 700;
-            font-size: 18px;
-            margin-bottom: 10px;
+        }
+
+        .step.inactive {
+            background: #e6dfd3;
+            color: #9b8d7a;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        p.subtitle {
+            text-align: center;
+            color: #777;
+            margin-bottom: 20px;
         }
 
         label {
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 600;
-            margin: 10px 0 6px;
+            color: #3a2c20;
             display: block;
+            margin: 12px 0 6px;
         }
 
-        input {
+        input,
+        textarea {
             width: 100%;
             padding: 12px;
             border-radius: 6px;
             border: 1px solid #ddd;
             font-size: 15px;
+        }
+
+        textarea {
+            resize: none;
+            height: 90px;
         }
 
         .row {
@@ -162,12 +144,12 @@
             background: #623817;
             color: #fff;
             border: none;
-            padding: 14px;
+            padding: 15px;
+            font-size: 16px;
             border-radius: 6px;
-            font-size: 17px;
             cursor: pointer;
-            margin-top: 22px;
             font-weight: 600;
+            margin-top: 25px;
         }
 
         button:hover {
@@ -175,14 +157,28 @@
         }
 
         .back-btn {
-            margin-top: 18px;
             text-align: center;
+            margin-top: 24px;
         }
 
         .back-btn a {
-            font-size: 14px;
+            background: #fff;
+            padding: 10px 18px;
+            border-radius: 6px;
+            border: 1px solid #c7b9a5;
+            color: #4d2e14;
             text-decoration: none;
+            font-weight: 600;
+        }
+
+        .summary {
+            font-size: 15px;
+            margin-bottom: 15px;
             color: #6b4a29;
+        }
+
+        .summary strong {
+            color: #000;
         }
     </style>
 </head>
@@ -204,60 +200,50 @@
         </div>
     </header>
 
-    <h1>Payment</h1>
-    <p class="subtitle">Complete your partial payment to secure your appointment</p>
-
-    <div class="payment-cards">
-
-        <div class="card">
-            <h3>Total Amount</h3>
-            <div class="amount">₹800</div>
-        </div>
-
-        <div class="card active">
-            <h3>Deposit (50%)</h3>
-            <div class="amount">₹400</div>
-        </div>
-
-        <div class="card">
-            <h3>Balance Due</h3>
-            <div class="amount">₹400</div>
-            <div class="small-text">Due at appointment</div>
-        </div>
-
+    <div class="step-indicator">
+        <div class="step">1</div>
+        <div class="step">2</div>
+        <div class="step">3</div>
+        <div class="step">4</div>
+        <div class="step inactive">5</div>
     </div>
 
+    <h1>Your Information</h1>
+    <p class="subtitle">Confirm your details below</p>
+
     <div class="container">
-        <div class="section-title">
-            💳 Payment Details
-        </div>
-        <p style="color:#6e6a64; font-size:14px;">Enter your card information to complete the deposit payment</p>
 
-        <form action="success.html" method="POST">
+        <p class="summary">
+            <strong>Booking Summary</strong><br>
+            Classic Haircut with Barber One on October 27, 2025 at 5:00 PM
+        </p>
 
-            <label>Cardholder Name *</label>
-            <input type="text" placeholder="John Doe" required>
-
-            <label>Card Number *</label>
-            <input type="text" maxlength="19" placeholder="4532 1234 5678 9010" required>
+        <form action="payment.php" method="POST">
 
             <div class="row">
                 <div style="flex:1">
-                    <label>Expiry Date *</label>
-                    <input type="text" placeholder="MM/YY" maxlength="5" required>
+                    <label>Full Name *</label>
+                    <input type="text" value="Manish Thakur" required>
                 </div>
                 <div style="flex:1">
-                    <label>CVV *</label>
-                    <input type="password" maxlength="3" placeholder="123" required>
+                    <label>Phone Number *</label>
+                    <input type="text" value="9841568995" required>
                 </div>
             </div>
 
-            <button type="submit">Pay ₹400 Now</button>
+            <label>Email Address *</label>
+            <input type="email" value="anujacharya@gmail.com" required>
+
+            <label>Special Requests (Optional)</label>
+            <textarea placeholder="Any special requests or notes for your barber..."></textarea>
+
+            <button type="submit">Continue to Payment</button>
         </form>
 
         <div class="back-btn">
-            <a href="confirmation.html">← Go Back</a>
+            <a href="booking3.html">Back to Date & Time</a>
         </div>
+
     </div>
 
 </body>
