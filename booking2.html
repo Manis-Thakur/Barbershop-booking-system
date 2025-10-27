@@ -219,19 +219,19 @@
     <p class="selected">Selected: <strong>Classic Haircut</strong></p>
 
     <div class="barber-container">
-        <div class="barber-card">
+        <div class="barber-card" id="barber-card">
             <div class="barber-title">Barber One</div>
             <div class="barber-service">Haircuts</div>
             <div class="barber-exp">5 years</div>
         </div>
 
-        <div class="barber-card">
+        <div class="barber-card" id="barber-card">
             <div class="barber-title">Barber Two</div>
             <div class="barber-service">Beard Trims</div>
             <div class="barber-exp">3 years</div>
         </div>
 
-        <div class="barber-card">
+        <div class="barber-card" id="barber-card">
             <div class="barber-title">Barber Three</div>
             <div class="barber-service">Styling</div>
             <div class="barber-exp">4 years</div>
@@ -240,5 +240,11 @@
 
     <a href="Booking.html" class="back-btn">Back to Services</a>
 </body>
+
+<script>
+    document.getElementById('barber-card').addEventListener('click', function() {
+        window.location.href = 'booking3.html';
+    });
+</script>
 
 </html>

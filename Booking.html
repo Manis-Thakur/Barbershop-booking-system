@@ -221,9 +221,9 @@
         <h1>Choose Your Service</h1>
         <p>Select the service you'd like to book</p>
 
-        <div class="service-grid">
+        <div class="service-grid" id="service-grid">
             <div class="card">
-                <img src="images/classich.jpg   " alt="Classic Haircut">
+               <img src="images/classich.jpg   " alt="Classic Haircut">
                 <div class="card-body">
                     <h3>Classic Haircut</h3>
                     <div class="card-info">
@@ -233,7 +233,7 @@
                 </div>
             </div>
 
-            <div class="card">
+            <div class="card"  id="service-grid">
                 <img src="images/beard.jpg" alt="Beard Trim">
                 <div class="card-body">
                     <h3>Beard Trim</h3>
@@ -244,7 +244,7 @@
                 </div>
             </div>
 
-            <div class="card">
+            <div class="card"  id="service-grid">
                 <img src="images/cut and beard.webp" alt="Cut & Beard Combo">
                 <div class="card-body">
                     <h3>Cut & Beard Combo</h3>
@@ -254,7 +254,7 @@
                     </div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card"  id="service-grid">
                 <img src="images/haircolor.jpg" alt="hair color">
                 <div class="card-body">
                     <h3>Hair Colour</h3>
@@ -266,6 +266,19 @@
             </div>
         </div>
     </section>
+
+    <script>
+        document.getElementById('service-grid').addEventListener('click', function (e) {
+            let card = e.target.closest('.card');
+            if (card) {
+                let serviceName = card.querySelector('h3').innerText;
+                // Store selected service in localStorage
+                localStorage.setItem('selectedService', serviceName);
+                // Redirect to the next booking step
+                window.location.href = 'booking2.html';
+            }
+        });x
+    </script>
 
 </body>
 
