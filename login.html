@@ -141,6 +141,14 @@
             border-top: 1px solid #ddd0c7;
         }
 
+        .error {
+            color: red;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            margin-bottom: 0;
+        }
+
+
         /* Admin Section */
         .admin-login p {
             color: #5a4c3e;
@@ -181,7 +189,7 @@
 
 <body>
 
-    <div class="login-container"> 
+    <div class="login-container">
         <div class="login-card">
             <div class="logo">✂</div>
             <h2>Welcome Back</h2>
@@ -192,6 +200,7 @@
             <form action="login.php" method="POST">
                 <label for="email">Email Address</label>
                 <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                <p class="error" id="emailError"></p>
 
                 <label for="password">Password</label>
                 <div class="password-field">
@@ -200,12 +209,13 @@
                         visibility
                     </span>
                 </div>
+                <p class="error" id="passwordError"></p>
 
                 <button type="submit" class="btn">Sign In</button>
             </form>
 
             <p class="register-text">
-                Don't have an account? <a href="#">Create one here</a>
+                Don't have an account? <a href="signup.html">Create one here</a>
             </p>
 
             <hr>
@@ -219,7 +229,7 @@
         </div>
     </div>
 
-        <script>
+    <script>
         // Show/Hide password toggle
         const toggle = document.querySelector('.toggle');
         const password = document.querySelector('#password');
@@ -227,6 +237,23 @@
             const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
             password.setAttribute('type', type);
         });
+
+
+        // Display error messages from URL parameters
+    const params = new URLSearchParams(window.location.search);
+    const error = params.get("error");
+
+    if (error) {
+
+        // Optional: highlight specific field
+        if (error.toLowerCase().includes("email")) {
+            document.getElementById("emailError").textContent = error;
+        } else if (error.toLowerCase().includes("password")) {
+            document.getElementById("passwordError").textContent = error;
+        }
+    }
+
+
     </script>
 
 </body>

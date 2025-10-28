@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -18,11 +22,16 @@
     <!-- Navbar -->
     <div class="navbar">
         <div class="logo"><span>✂</span> GroomEase</div>
-        <div class="nav-links">
-            <a href="login.html" class="btn btn-outline">Sign In</a>
-            <a href="signup.html" class="btn btn-primary">Sign Up</a>
-        </div>
 
+        <div class="nav-links">
+            <?php if (isset($_SESSION['fullname'])): ?>
+                <span class="welcome-text">Welcome, <?php echo htmlspecialchars($_SESSION['fullname']); ?>!</span>
+                <a href="logout.php" class="btn btn-outline">Logout</a>
+            <?php else: ?>
+                <a href="login.html" class="btn btn-outline">Sign In</a>
+                <a href="signup.html" class="btn btn-primary">Sign Up</a>
+            <?php endif; ?>
+        </div>
     </div>
 
     <!-- Hero Section -->

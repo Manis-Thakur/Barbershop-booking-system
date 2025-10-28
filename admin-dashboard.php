@@ -1,3 +1,13 @@
+
+<?php
+session_start();
+if (!isset($_SESSION['admin_name'])) {
+    header("Location: admin-login.html");
+    exit();
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -15,13 +25,16 @@
         <div class="logo">
             <div class="logo-icon">✂</div>
             <div>
-                <h2>Admin dashboard</h2>
+                <?php if (isset($_SESSION['admin_name'])): ?>
+                    <h2 class="welcome-text"><?php echo htmlspecialchars($_SESSION['admin_name']); ?></h2>
+                <?php endif; ?>
             </div>
         </div>
 
+
         <div class="nav-buttons">
-            <a href="index.html" class="btn-light">View customer site</a>
-            <a href="signup.html" class="btn-light">Sign out</a>
+            <a href="index.php" class="btn-light">View customer site</a>
+            <a href="admin-logout.php" class="btn-light">Sign out</a>
         </div>
     </header>
 

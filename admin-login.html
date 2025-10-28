@@ -12,7 +12,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family:  "Segoe UI", sans-serif;
+            font-family: "Segoe UI", sans-serif;
         }
 
         /* Background */
@@ -104,6 +104,13 @@
             user-select: none;
         }
 
+        .error {
+            color: red;
+            font-size: 0.9rem;
+            margin: 5px 0;
+        }
+
+
         /* Button */
         .btn {
             width: 100%;
@@ -162,9 +169,10 @@
                 Sign in to access the GroomEase admin dashboard
             </p>
 
-            <form action="admin-dashboard.php" method="POST">
+            <form action="admin-login.php" method="POST">
                 <label for="email">Email Address</label>
                 <input type="email" id="email" name="email" placeholder="admin@groomease.com" required />
+                <p class="error" id="emailError"></p>
 
                 <label for="password">Password</label>
                 <div class="password-field">
@@ -173,6 +181,7 @@
                         visibility
                     </span>
                 </div>
+                <p class="error" id="passwordError"></p>
 
                 <button type="submit" class="btn">Sign In</button>
             </form>
@@ -190,6 +199,19 @@
             const type = password.getAttribute("type") === "password" ? "text" : "password";
             password.setAttribute("type", type);
         });
+
+            // Display error messages from URL parameters
+            const params = new URLSearchParams(window.location.search);
+            const error = params.get("error");
+
+            if (error) {
+                if (error.toLowerCase().includes("email")) {
+                    document.getElementById("emailError").textContent = error;
+                } else if (error.toLowerCase().includes("password")) {
+                    document.getElementById("passwordError").textContent = error;
+                }
+            }
+        
     </script>
 </body>
 
