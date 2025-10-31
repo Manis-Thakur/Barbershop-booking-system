@@ -43,7 +43,7 @@ session_start();
                 Book your appointment online and enjoy professional grooming services tailored to your style.
             </p>
             <div class="hero-buttons">
-                <a href="Booking.html" class="btn btn-primary">Book Appointment →</a>
+                <a href="Booking.php" class="btn btn-primary">Book Appointment →</a>
             </div>
         </div>
         <img src="images/forntpic.jpeg" alt="Barber Shop">
@@ -61,7 +61,7 @@ session_start();
                 <img src="images/classich.jpg " alt="Classic Haircut">
                 <div class="service-info">
                     <span class="service-title">Classic Haircut</span>
-                    <span class="service-price">₹800</span>
+                    <span class="service-price">₹250</span>
                     <br>
                     <span class="service-time">30 minutes</span>
                 </div>
@@ -72,7 +72,7 @@ session_start();
                 <img src="images/beard.jpg" alt="Beard Trim">
                 <div class="service-info">
                     <span class="service-title">Beard Trim</span>
-                    <span class="service-price">₹500</span>
+                    <span class="service-price">₹150</span>
                     <br>
                     <span class="service-time">20 minutes</span>
                 </div>
@@ -83,7 +83,7 @@ session_start();
                 <img src="images/cut and beard.webp" alt="Cut & Beard Combo">
                 <div class="service-info">
                     <span class="service-title">Cut & Beard Combo</span>
-                    <span class="service-price">₹1,000</span>
+                    <span class="service-price">₹500</span>
                     <br>
                     <span class="service-time">45 minutes</span>
                 </div>
@@ -92,7 +92,7 @@ session_start();
         </div>
 
         <div class="btn-center">
-            <a href="Booking.html" class="btn-book">View All Services & Book Now</a>
+            <a href="Booking.php" class="btn-book">View All Services & Book Now</a>
         </div>
     </section>
 

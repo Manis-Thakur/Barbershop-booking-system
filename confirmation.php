@@ -1,10 +1,22 @@
+<?php
+session_start();
+
+// Optional: Protect page — only logged-in users can confirm booking
+if (!isset($_SESSION['user_id'])) {
+    header("Location: signin.html");
+    exit();
+}
+
+$user_name = $_SESSION['fullname'] ?? '';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Information</title>
+    <title>Your Information | GroomEase</title>
 
     <style>
         body {
@@ -12,7 +24,6 @@
             background: #faf6ef;
             margin: 0;
         }
-
 
         .navbar {
             display: flex;
@@ -208,9 +219,14 @@
         </div>
 
         <div class="nav-buttons">
-            <a href="index.html" class="btn-light">← Back to Home</a>
-            <a href="signin.html" class="btn-light">Sign In</a>
-            <a href="signup.html" class="btn-dark">Sign Up</a>
+            <?php if (!empty($user_name)): ?>
+                <span>👋 Hi, <?php echo htmlspecialchars($user_name); ?></span>
+                <a href="logout.php" class="btn-light">← Back to Home</a>
+            <?php else: ?>
+                <a href="index.php" class="btn-light">← Back to Home</a>
+                <a href="signin.html" class="btn-light">Sign In</a>
+                <a href="signup.html" class="btn-dark">Sign Up</a>
+            <?php endif; ?>
         </div>
     </header>
 
@@ -228,7 +244,7 @@
             <div class="line"></div>
         </div>
         <div class="step">
-            <div class="circle ">4</div>
+            <div class="circle">4</div>
             <div class="line"></div>
         </div>
         <div class="step">
@@ -240,40 +256,65 @@
     <p class="subtitle">Confirm your details below</p>
 
     <div class="container">
+        <p id="bookingSummary" class="summary"><strong>Booking Summary</strong><br>Loading your booking details...</p>
 
-        <p class="summary">
-            <strong>Booking Summary</strong><br>
-            Classic Haircut with Barber One on October 27, 2025 at 5:00 PM
-        </p>
-
-        <form action="payment.php" method="POST">
-
+        <form id="confirmationForm" action="payment.php" method="POST">
             <div class="row">
                 <div style="flex:1">
                     <label>Full Name *</label>
-                    <input type="text" placeholder="Manish Thakur" required>
+                    <input type="text" name="fullname" id="fullname"
+                        value="<?php echo htmlspecialchars($_SESSION['fullname'] ?? ''); ?>" required>
                 </div>
                 <div style="flex:1">
                     <label>Phone Number *</label>
-                    <input type="text" placeholder="9841568995" required>
+                    <input type="text" name="phone" id="phone" required>
                 </div>
             </div>
 
             <label>Email Address *</label>
-            <input type="email" placeholder="demo@gmail.com" required>
+            <input type="email" name="email" id="email"
+                value="<?php echo htmlspecialchars($_SESSION['email'] ?? ''); ?>" required>
 
             <label>Special Requests (Optional)</label>
-            <textarea placeholder="Any special requests or notes for your barber..."></textarea>
+            <textarea name="notes" placeholder="Any special requests or notes for your barber..."></textarea>
+
+            <!-- Hidden fields to pass booking details -->
+            <input type="hidden" name="service_name" id="service_name">
+            <input type="hidden" name="barber_name" id="barber_name">
+            <input type="hidden" name="booking_date" id="booking_date">
+            <input type="hidden" name="booking_time" id="booking_time">
 
             <button type="submit">Continue to Payment</button>
         </form>
 
         <div class="back-btn">
-            <a href="booking3.html">Back to Date & Time</a>
+            <a href="booking3.php">Back to Date & Time</a>
         </div>
-
     </div>
-    
+
+    <script>
+        // Load booking details from localStorage
+        const service = localStorage.getItem("selectedService");
+        const barber = localStorage.getItem("selectedBarber");
+        const date = localStorage.getItem("bookingDate");
+        const time = localStorage.getItem("bookingTime");
+
+        // Update summary text
+        const summary = document.getElementById("bookingSummary");
+        if (service && barber && date && time) {
+            summary.innerHTML = `<strong>Booking Summary</strong><br>
+                ${service} with ${barber} on ${date} at ${time}`;
+        } else {
+            summary.textContent = "Booking details missing. Please go back and select again.";
+        }
+
+        // Fill hidden inputs for form submission
+        document.getElementById("service_name").value = service;
+        document.getElementById("barber_name").value = barber;
+        document.getElementById("booking_date").value = date;
+        document.getElementById("booking_time").value = time;
+    </script>
+
 </body>
 
 </html>

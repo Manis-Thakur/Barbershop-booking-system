@@ -256,7 +256,7 @@
         </form>
 
         <div class="back-btn">
-            <a href="confirmation.html">← Go Back</a>
+            <a href="confirmation.php">← Go Back</a>
         </div>
     </div>
 

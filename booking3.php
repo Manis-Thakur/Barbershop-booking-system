@@ -1,3 +1,11 @@
+<?php
+session_start();
+
+// You can display the user's name in navbar if logged in
+$user_name = $_SESSION['fullname'] ?? '';
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -240,9 +248,14 @@
         </div>
 
         <div class="nav-buttons">
-            <a href="index.html" class="btn-light">← Back to Home</a>
-            <a href="signin.html" class="btn-light">Sign In</a>
-            <a href="signup.html" class="btn-dark">Sign Up</a>
+            <?php if (!empty($user_name)): ?>
+                <span>👋 Hi, <?php echo htmlspecialchars($user_name); ?></span>
+                <a href="logout.php" class="btn-light">← Back to Home</a>
+            <?php else: ?>
+                <a href="index.php" class="btn-light">← Back to Home</a>
+                <a href="signin.html" class="btn-light">Sign In</a>
+                <a href="signup.html" class="btn-dark">Sign Up</a>
+            <?php endif; ?>
         </div>
     </header>
 
@@ -370,7 +383,7 @@
                 alert("Please select both a date and time to continue.");
                 return;
             }
-            window.location.href = "confirmation.html";
+            window.location.href = "confirmation.php";
         });
 
     </script>

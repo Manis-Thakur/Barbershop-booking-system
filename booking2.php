@@ -1,3 +1,10 @@
+<?php
+session_start();
+
+// You can display the user's name in navbar if logged in
+$user_name = $_SESSION['fullname'] ?? '';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -187,13 +194,20 @@
         </div>
 
         <div class="nav-buttons">
-            <a href="index.html" class="btn-light">← Back to Home</a>
-            <a href="signin.html" class="btn-light">Sign In</a>
-            <a href="signup.html" class="btn-dark">Sign Up</a>
+            <?php if (!empty($user_name)): ?>
+                <span>👋 Hi, <?php echo htmlspecialchars($user_name); ?></span>
+                <a href="logout.php" class="btn-light">← Back to Home</a>
+            <?php else: ?>
+                <a href="index.php" class="btn-light">← Back to Home</a>
+                <a href="signin.html" class="btn-light">Sign In</a>
+                <a href="signup.html" class="btn-dark">Sign Up</a>
+            <?php endif; ?>
         </div>
     </header>
+
+
     <!-- Step Progress -->
-        <div class="steps">
+    <div class="steps">
         <div class="step">
             <div class="circle">1</div>
             <div class="line"></div>
@@ -242,9 +256,15 @@
 </body>
 
 <script>
-    document.getElementById('barber-card').addEventListener('click', function() {
-        window.location.href = 'booking3.html';
+    document.querySelectorAll(".barber-card").forEach(card => {
+        card.addEventListener("click", () => {
+            const barber = card.querySelector(".barber-title").innerText;
+            localStorage.setItem("barber", barber);
+            window.location.href = "booking3.php";
+        });
     });
+
 </script>
+
 
 </html>

@@ -1,3 +1,18 @@
+<?php
+session_start();
+
+// Optional: Redirect user if not logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.html?error=Please login to book a service");
+    exit();
+}
+
+// You can display the user's name in navbar if logged in
+$user_name = $_SESSION['fullname'] ?? '';
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -185,11 +200,15 @@
                 <p>Book Your Appointment</p>
             </div>
         </div>
-
         <div class="nav-buttons">
-            <a href="index.html" class="btn-light">← Back to Home</a>
-            <a href="signin.html" class="btn-light">Sign In</a>
-            <a href="signup.html" class="btn-dark">Sign Up</a>
+            <?php if (!empty($user_name)): ?>
+                <span>👋 Hi, <?php echo htmlspecialchars($user_name); ?></span>
+                <a href="logout.php" class="btn-light">← Back to Home</a>
+            <?php else: ?>
+                <a href="index.php" class="btn-light">← Back to Home</a>
+                <a href="signin.html" class="btn-light">Sign In</a>
+                <a href="signup.html" class="btn-dark">Sign Up</a>
+            <?php endif; ?>
         </div>
     </header>
 
@@ -223,38 +242,38 @@
 
         <div class="service-grid" id="service-grid">
             <div class="card">
-               <img src="images/classich.jpg   " alt="Classic Haircut">
+                <img src="images/classich.jpg   " alt="Classic Haircut">
                 <div class="card-body">
                     <h3>Classic Haircut</h3>
                     <div class="card-info">
                         <span>⏱️ 30 minutes</span>
-                        <span class="price">₹800</span>
+                        <span class="price">₹250</span>
                     </div>
                 </div>
             </div>
 
-            <div class="card"  id="service-grid">
+            <div class="card" id="service-grid">
                 <img src="images/beard.jpg" alt="Beard Trim">
                 <div class="card-body">
                     <h3>Beard Trim</h3>
                     <div class="card-info">
                         <span>⏱️ 20 minutes</span>
-                        <span class="price">₹500</span>
+                        <span class="price">₹150</span>
                     </div>
                 </div>
             </div>
 
-            <div class="card"  id="service-grid">
+            <div class="card" id="service-grid">
                 <img src="images/cut and beard.webp" alt="Cut & Beard Combo">
                 <div class="card-body">
                     <h3>Cut & Beard Combo</h3>
                     <div class="card-info">
                         <span>⏱️ 45 minutes</span>
-                        <span class="price">₹1,000</span>
+                        <span class="price">₹500</span>
                     </div>
                 </div>
             </div>
-            <div class="card"  id="service-grid">
+            <div class="card" id="service-grid">
                 <img src="images/haircolor.jpg" alt="hair color">
                 <div class="card-body">
                     <h3>Hair Colour</h3>
@@ -275,9 +294,9 @@
                 // Store selected service in localStorage
                 localStorage.setItem('selectedService', serviceName);
                 // Redirect to the next booking step
-                window.location.href = 'booking2.html';
+                window.location.href = 'booking2.php';
             }
-        });x
+        }); x
     </script>
 
 </body>
