@@ -278,11 +278,7 @@ $user_name = $_SESSION['fullname'] ?? '';
             <label>Special Requests (Optional)</label>
             <textarea name="notes" placeholder="Any special requests or notes for your barber..."></textarea>
 
-            <!-- Hidden fields to pass booking details -->
-            <input type="hidden" name="service_name" id="service_name">
-            <input type="hidden" name="barber_name" id="barber_name">
-            <input type="hidden" name="booking_date" id="booking_date">
-            <input type="hidden" name="booking_time" id="booking_time">
+    
 
             <button type="submit">Continue to Payment</button>
         </form>
@@ -293,11 +289,6 @@ $user_name = $_SESSION['fullname'] ?? '';
     </div>
 
     <script>
-        // Load booking details from localStorage
-        const service = localStorage.getItem("selectedService");
-        const barber = localStorage.getItem("selectedBarber");
-        const date = localStorage.getItem("bookingDate");
-        const time = localStorage.getItem("bookingTime");
 
         // Update summary text
         const summary = document.getElementById("bookingSummary");

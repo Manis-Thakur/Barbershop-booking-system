@@ -291,12 +291,16 @@ $user_name = $_SESSION['fullname'] ?? '';
             let card = e.target.closest('.card');
             if (card) {
                 let serviceName = card.querySelector('h3').innerText;
+                let price = card.querySelector('.price').innerText;
+                let duration = card.querySelector('.card-info span').innerText;
                 // Store selected service in localStorage
                 localStorage.setItem('selectedService', serviceName);
+                localStorage.setItem('selectedPrice', price);
+                localStorage.setItem('selectedDuration', duration);
                 // Redirect to the next booking step
                 window.location.href = 'booking2.php';
             }
-        }); x
+        }); 
     </script>
 
 </body>

@@ -230,36 +230,39 @@ $user_name = $_SESSION['fullname'] ?? '';
     </div>
 
     <h1>Choose Your Barber</h1>
-    <p class="selected">Selected: <strong>Classic Haircut</strong></p>
+    <p class="selected">Selected: <strong id="choosedService">Classic Haircut</strong></p>
 
     <div class="barber-container">
         <div class="barber-card" id="barber-card">
-            <div class="barber-title">Barber One</div>
+            <div class="barber-title">Manish Thakur</div>
             <div class="barber-service">Haircuts</div>
             <div class="barber-exp">5 years</div>
         </div>
 
         <div class="barber-card" id="barber-card">
-            <div class="barber-title">Barber Two</div>
+            <div class="barber-title">Anuj Acharya</div>
             <div class="barber-service">Beard Trims</div>
             <div class="barber-exp">3 years</div>
         </div>
 
         <div class="barber-card" id="barber-card">
-            <div class="barber-title">Barber Three</div>
+            <div class="barber-title">Arzun Malla</div>
             <div class="barber-service">Styling</div>
             <div class="barber-exp">4 years</div>
         </div>
     </div>
 
-    <a href="Booking.html" class="back-btn">Back to Services</a>
+    <a href="Booking.php" class="back-btn">Back to Services</a>
 </body>
 
 <script>
+    let displayService = document.getElementById('choosedService');
+    displayService.innerText = localStorage.getItem('selectedService');
+
     document.querySelectorAll(".barber-card").forEach(card => {
         card.addEventListener("click", () => {
             const barber = card.querySelector(".barber-title").innerText;
-            localStorage.setItem("barber", barber);
+            localStorage.setItem("selectedBarber", barber);
             window.location.href = "booking3.php";
         });
     });

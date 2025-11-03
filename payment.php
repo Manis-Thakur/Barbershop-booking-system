@@ -211,17 +211,17 @@
 
         <div class="card">
             <h3>Total Amount</h3>
-            <div class="amount">₹800</div>
+            <div class="amount" id="choosedPrice">₹800</div>
         </div>
 
         <div class="card active">
             <h3>Deposit (50%)</h3>
-            <div class="amount">₹400</div>
+            <div class="amount"></div>
         </div>
 
         <div class="card">
             <h3>Balance Due</h3>
-            <div class="amount">₹400</div>
+            <div class="amount" id="due"></div>
             <div class="small-text">Due at appointment</div>
         </div>
 
@@ -233,7 +233,7 @@
         </div>
         <p style="color:#6e6a64; font-size:14px;">Enter your card information to complete the deposit payment</p>
 
-        <form action="success.html" method="POST">
+        <form action="save-booking.php" method="POST">
 
             <label>Cardholder Name *</label>
             <input type="text" placeholder="John Doe" required>
@@ -251,14 +251,40 @@
                     <input type="password" maxlength="3" placeholder="123" required>
                 </div>
             </div>
+            <input type="hidden" name="service_name" value="" id="service_name_input">
+            <input type="hidden" name="barber_name" value="" id="barber_name_input">
+            <input type="hidden" name="booking_date" value="" id="booking_date_input">
+            <input type="hidden" name="booking_time" value="" id="booking_time_input">
+            <input type="hidden" name="payment_amount" value="" id="payment_amount_input">
 
-            <button type="submit">Pay ₹400 Now</button>
+            <button type="submit"></button>
         </form>
 
         <div class="back-btn">
             <a href="confirmation.php">← Go Back</a>
         </div>
     </div>
+
+    <script>
+
+
+
+        let displayPrice = document.getElementById('choosedPrice');
+        displayPrice.innerText = localStorage.getItem('selectedPrice');
+
+        let partialAmount = parseFloat(localStorage.getItem('selectedPrice').replace('₹', '').replace(',', '')) / 2;
+        document.querySelector('.card.active .amount').innerText = `₹${partialAmount.toFixed(0)}`;
+        document.getElementById('due').innerText = `₹${partialAmount.toFixed(0)}`;
+        document.querySelector('button').innerText = `Pay ₹${partialAmount.toFixed(0)} Now`;
+        localStorage.setItem('paymentAmount', partialAmount);
+
+        // Store the amount in hidden input (so PHP can get it)
+        document.getElementById('service_name_input').value = localStorage.getItem('selectedService');
+        document.getElementById('barber_name_input').value = localStorage.getItem('selectedBarber');
+        document.getElementById('booking_date_input').value = localStorage.getItem('bookingDate');
+        document.getElementById('booking_time_input').value = localStorage.getItem('bookingTime');
+        document.getElementById('payment_amount_input').value = localStorage.getItem('paymentAmount');
+    </script>
 
 </body>
 

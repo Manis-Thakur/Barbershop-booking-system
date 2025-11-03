@@ -149,6 +149,12 @@ $user_name = $_SESSION['fullname'] ?? '';
             border-color: #c98d55;
         }
 
+        .time-slot.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background-color: #ddd;
+        }
+
         .selected-info {
             margin-top: 30px;
             font-size: 1.1rem;
@@ -283,7 +289,7 @@ $user_name = $_SESSION['fullname'] ?? '';
     </div>
 
     <h1>Select Date & Time</h1>
-    <p class="subtitle">Classic Haircut with Barber One</p>
+    <p class="subtitle"></p>
 
     <div class="main-wrapper">
         <!-- Date Container -->
@@ -313,12 +319,16 @@ $user_name = $_SESSION['fullname'] ?? '';
     <div class="selected-info" id="selectedInfo">No date/time selected</div>
 
     <div class="buttons">
-        <a href="booking2.html" class="back-btn">Back to Barbers</a>
+        <a href="booking2.php" class="back-btn">Back to Barbers</a>
         <a id="continueBtn" class="continue-btn">Continue to Booking</a>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
+
+        const service = localStorage.getItem("selectedService") || "No Service Selected";
+        const barber = localStorage.getItem("selectedBarber") || "No Barber Selected";
+        document.querySelector(".subtitle").innerText = `${service} with ${barber}`;
 
         let selectedDate = null;
         let selectedTime = null;
@@ -343,6 +353,34 @@ $user_name = $_SESSION['fullname'] ?? '';
                 updateSelectedInfo();
             }
         });
+        
+        // === Fetch Booked Slots from Server ===
+        async function fetchBookedSlots() {
+            if (!selectedDate || !barber) return;
+
+            const res = await fetch(`get-booked-slots.php?barber_name=${encodeURIComponent(barber)}`);
+            const data = await res.json();
+
+            const timeSlots = document.querySelectorAll(".time-slot");
+            timeSlots.forEach(btn => {
+                btn.classList.remove("disabled");
+                btn.style.opacity = "1";
+                btn.style.cursor = "pointer";
+            });
+
+            data.forEach(slot => {
+                if (slot.booking_date === selectedDate) {
+                    const bookedTime = slot.booking_time.slice(0, 5);
+                    timeSlots.forEach(btn => {
+                        if (btn.dataset.time === bookedTime) {
+                            btn.classList.add("disabled");
+                            btn.style.opacity = "0.5";
+                            btn.style.cursor = "not-allowed";
+                        }
+                    });
+                }
+            });
+        }
 
         // === Time Slot Selection ===
         const timeSlots = document.querySelectorAll(".time-slot");
