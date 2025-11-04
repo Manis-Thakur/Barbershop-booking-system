@@ -5,7 +5,6 @@ session_start();
 $user_name = $_SESSION['fullname'] ?? '';
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -76,93 +75,6 @@ $user_name = $_SESSION['fullname'] ?? '';
             color: #fff;
         }
 
-        h1 {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #2e1a11;
-            margin-bottom: 5px;
-        }
-
-        h3 {
-            margin-bottom: 15px;
-        }
-
-        .subtitle {
-            color: #7b6b5d;
-            font-size: 1rem;
-            margin-bottom: 40px;
-        }
-
-        .main-wrapper {
-            display: flex;
-            gap: 40px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .box {
-            background-color: #fff;
-            padding: 30px 40px;
-            border-radius: 20px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            min-width: 340px;
-        }
-
-        /* Calendar Styles */
-
-        .calendar {
-            width: 100%;
-            font-size: 1rem;
-            border: 1px solid #e2d4c3;
-            border-radius: 8px;
-            padding: 10px;
-            background-color: #f6f0e6;
-
-        }
-
-        /* Time Slots */
-        .time-slots {
-            display: grid;
-            grid-template-columns: repeat(3, 100px);
-            gap: 12px;
-            justify-content: center;
-            margin-top: 10px;
-        }
-
-        .time-slot {
-            background-color: #f6f0e6;
-            border: 1px solid #e2d4c3;
-            border-radius: 8px;
-            padding: 10px;
-            text-align: center;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .time-slot:hover {
-            background-color: #e8d6bf;
-        }
-
-        .time-slot.selected {
-            background-color: #d29c68;
-            color: #fff;
-            border-color: #c98d55;
-        }
-
-        .time-slot.disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            background-color: #ddd;
-        }
-
-        .selected-info {
-            margin-top: 30px;
-            font-size: 1.1rem;
-            color: #3b2b20;
-            font-weight: 500;
-        }
-
-        /* Step Indicators */
         .steps {
             display: flex;
             align-items: center;
@@ -201,7 +113,92 @@ $user_name = $_SESSION['fullname'] ?? '';
             background-color: #e0d9cf;
         }
 
-        /* buttons */
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2e1a11;
+            margin-bottom: 5px;
+        }
+
+        h3 {
+            margin-bottom: 15px;
+        }
+
+        .subtitle {
+            color: #7b6b5d;
+            font-size: 1rem;
+            margin-bottom: 40px;
+        }
+
+        .main-wrapper {
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .box {
+            background-color: #fff;
+            padding: 30px 40px;
+            border-radius: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            min-width: 340px;
+        }
+
+        .calendar {
+            width: 100%;
+            font-size: 1rem;
+            border: 1px solid #e2d4c3;
+            border-radius: 8px;
+            padding: 10px;
+            background-color: #f6f0e6;
+        }
+
+        .time-slots {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            gap: 12px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .time-slot {
+            background-color: #f6f0e6;
+            border: 1px solid #e2d4c3;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .time-slot:hover {
+            background-color: #e8d6bf;
+        }
+
+        .time-slot.selected {
+            background-color: #d29c68;
+            color: #fff;
+            border-color: #c98d55;
+        }
+
+        .time-slot.disabled {
+            background-color: #e0d8cf;
+            color: #aaa;
+            border-color: #ccc;
+            cursor: not-allowed;
+            opacity: 0.6;
+            filter: blur(0.5px);
+        }
+
+        .selected-info {
+            margin-top: 30px;
+            font-size: 1.1rem;
+            color: #3b2b20;
+            font-weight: 500;
+        }
+
         .buttons {
             display: flex;
             justify-content: space-between;
@@ -258,8 +255,7 @@ $user_name = $_SESSION['fullname'] ?? '';
                 <span>👋 Hi, <?php echo htmlspecialchars($user_name); ?></span>
                 <a href="logout.php" class="btn-light">← Back to Home</a>
             <?php else: ?>
-                <a href="index.php" class="btn-light">← Back to Home</a>
-                <a href="signin.html" class="btn-light">Sign In</a>
+                <a href="index.php" class="btn-light">← Back to Home</a> <a href="signin.html" class="btn-light">Sign In</a>
                 <a href="signup.html" class="btn-dark">Sign Up</a>
             <?php endif; ?>
         </div>
@@ -325,67 +321,54 @@ $user_name = $_SESSION['fullname'] ?? '';
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
-
         const service = localStorage.getItem("selectedService") || "No Service Selected";
         const barber = localStorage.getItem("selectedBarber") || "No Barber Selected";
         document.querySelector(".subtitle").innerText = `${service} with ${barber}`;
 
         let selectedDate = null;
         let selectedTime = null;
+        let bookedSlots = []; // store booked slots fetched from PHP
+
+        // === Fetch Booked Slots for this barber ===
+        async function loadBookedSlots() {
+            if (!barber || barber === "No Barber Selected") return;
+            const response = await fetch(`get_booked_slots.php?barber_name=${encodeURIComponent(barber)}`);
+            bookedSlots = await response.json();
+        }
+
+        // === Check if this time is already booked for the selected date ===
+        function isBooked(date, time) {
+            return bookedSlots.some(slot => slot.booking_date === date && slot.booking_time === time);
+        }
+
+        // === Disable Booked Slots ===
+        function disableBookedSlots() {
+            const slots = document.querySelectorAll(".time-slot");
+            slots.forEach(slot => {
+                slot.classList.remove("disabled");
+                const time = slot.textContent.trim();
+                if (selectedDate && isBooked(selectedDate, time)) {
+                    slot.classList.add("disabled");
+                }
+            });
+        }
 
         // === Calendar Setup ===
         flatpickr("#calendar", {
             minDate: "today",
-            maxDate: new Date().fp_incr(14), // allows dates only up to 14 days from today
+            maxDate: new Date().fp_incr(14),
             onChange: function (selectedDates, dateStr) {
                 selectedDate = dateStr;
+                disableBookedSlots();
                 updateSelectedInfo();
             }
         });
-
-
-        // === date Slot Selection ===
-        calendar.addEventListener("click", (e) => {
-            if (e.target.classList.contains("day")) {
-                document.querySelectorAll(".day").forEach(d => d.classList.remove("selected"));
-                e.target.classList.add("selected");
-                selectedDate = `${monthNames[currentMonth]} ${e.target.textContent}, ${currentYear}`;
-                updateSelectedInfo();
-            }
-        });
-        
-        // === Fetch Booked Slots from Server ===
-        async function fetchBookedSlots() {
-            if (!selectedDate || !barber) return;
-
-            const res = await fetch(`get-booked-slots.php?barber_name=${encodeURIComponent(barber)}`);
-            const data = await res.json();
-
-            const timeSlots = document.querySelectorAll(".time-slot");
-            timeSlots.forEach(btn => {
-                btn.classList.remove("disabled");
-                btn.style.opacity = "1";
-                btn.style.cursor = "pointer";
-            });
-
-            data.forEach(slot => {
-                if (slot.booking_date === selectedDate) {
-                    const bookedTime = slot.booking_time.slice(0, 5);
-                    timeSlots.forEach(btn => {
-                        if (btn.dataset.time === bookedTime) {
-                            btn.classList.add("disabled");
-                            btn.style.opacity = "0.5";
-                            btn.style.cursor = "not-allowed";
-                        }
-                    });
-                }
-            });
-        }
 
         // === Time Slot Selection ===
         const timeSlots = document.querySelectorAll(".time-slot");
         timeSlots.forEach(slot => {
             slot.addEventListener("click", () => {
+                if (slot.classList.contains("disabled")) return; // prevent selecting disabled
                 timeSlots.forEach(s => s.classList.remove("selected"));
                 slot.classList.add("selected");
                 selectedTime = slot.textContent;
@@ -396,23 +379,17 @@ $user_name = $_SESSION['fullname'] ?? '';
         // === Display Selection ===
         function updateSelectedInfo() {
             const info = document.getElementById("selectedInfo");
+            if (selectedDate) localStorage.setItem("bookingDate", selectedDate);
+            if (selectedTime) localStorage.setItem("bookingTime", selectedTime);
 
-            if (selectedDate) {
-                localStorage.setItem("bookingDate", selectedDate);
-            }
-            if (selectedTime) {
-                localStorage.setItem("bookingTime", selectedTime);
-            }
-
-            if (selectedDate && selectedTime) {
+            if (selectedDate && selectedTime)
                 info.textContent = `Selected: ${selectedDate} at ${selectedTime}`;
-            } else if (selectedDate) {
+            else if (selectedDate)
                 info.textContent = `Selected date: ${selectedDate}`;
-            } else if (selectedTime) {
+            else if (selectedTime)
                 info.textContent = `Selected time: ${selectedTime}`;
-            } else {
+            else
                 info.textContent = "No date/time selected";
-            }
         }
 
         // === Continue Button Logic ===
@@ -421,9 +398,13 @@ $user_name = $_SESSION['fullname'] ?? '';
                 alert("Please select both a date and time to continue.");
                 return;
             }
+            localStorage.setItem("bookingDate", selectedDate);
+            localStorage.setItem("bookingTime", selectedTime);
             window.location.href = "confirmation.php";
         });
 
+        // Load booked slots initially
+        loadBookedSlots();
     </script>
 
 </body>
