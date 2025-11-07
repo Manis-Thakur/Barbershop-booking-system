@@ -10,7 +10,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $service_name = $_POST['service_name'];
     $barber_name = $_POST['barber_name'];
     $booking_date = $_POST['booking_date'];
-    $booking_time = $_POST['booking_time'];
+    $booking_time = date("H:i:s", strtotime($_POST['booking_time']));
+
     $payment_amount = $_POST['payment_amount'];
 
     // Check for double booking
@@ -28,13 +29,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Insert booking
     $status = 'Confirmed';
     $payment_status = 'Paid';
-    $created_at = date('Y-m-d H:i:s');
+
 
     $insert = "INSERT INTO bookings 
-        (user_id, service_name, barber_name, booking_date, booking_time, status, created_at, payment_amount, payment_status)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+(user_id, service_name, barber_name, booking_date, booking_time, status, payment_amount, payment_status)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
     $stmt = $conn->prepare($insert);
-    $stmt->bind_param("isssssdss", $user_id, $service_name, $barber_name, $booking_date, $booking_time, $status, $created_at, $payment_amount, $payment_status);
+    $stmt->bind_param("isssssds", $user_id, $service_name, $barber_name, $booking_date, $booking_time, $status, $payment_amount, $payment_status);
 
     if ($stmt->execute()) {
         header("Location: payment-success.php");

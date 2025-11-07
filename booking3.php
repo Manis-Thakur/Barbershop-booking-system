@@ -327,13 +327,30 @@ $user_name = $_SESSION['fullname'] ?? '';
 
         let selectedDate = null;
         let selectedTime = null;
-        let bookedSlots = []; // store booked slots fetched from PHP
+        let bookedSlots = [];
 
-        // === Fetch Booked Slots for this barber ===
+        // Convert DB time (e.g., "07:00:00") to readable format (e.g., "7:00 AM")
+        function formatTimeForDisplay(dbTime) {
+            const [hour, minute] = dbTime.split(':');
+            let h = parseInt(hour);
+            const ampm = h >= 12 ? "PM" : "AM";
+            h = h % 12 || 12;
+            return `${h}:${minute} ${ampm}`;
+        }
+
+        // === Fetch booked slots for this barber ===
         async function loadBookedSlots() {
             if (!barber || barber === "No Barber Selected") return;
-            const response = await fetch(`get_booked_slots.php?barber_name=${encodeURIComponent(barber)}`);
+            const response = await fetch(`get-booked-slot.php?barber_name=${encodeURIComponent(barber)}`);
             bookedSlots = await response.json();
+
+            // Convert all DB times to display format for easy comparison
+            bookedSlots = bookedSlots.map(slot => ({
+                booking_date: slot.booking_date,
+                booking_time: formatTimeForDisplay(slot.booking_time)
+            }));
+
+            console.log("Booked Slots:", bookedSlots);
         }
 
         // === Check if this time is already booked for the selected date ===
@@ -349,6 +366,9 @@ $user_name = $_SESSION['fullname'] ?? '';
                 const time = slot.textContent.trim();
                 if (selectedDate && isBooked(selectedDate, time)) {
                     slot.classList.add("disabled");
+                    slot.style.opacity = "0.4";
+                    slot.style.pointerEvents = "none";
+                    slot.title = "Already booked";
                 }
             });
         }
@@ -368,7 +388,7 @@ $user_name = $_SESSION['fullname'] ?? '';
         const timeSlots = document.querySelectorAll(".time-slot");
         timeSlots.forEach(slot => {
             slot.addEventListener("click", () => {
-                if (slot.classList.contains("disabled")) return; // prevent selecting disabled
+                if (slot.classList.contains("disabled")) return;
                 timeSlots.forEach(s => s.classList.remove("selected"));
                 slot.classList.add("selected");
                 selectedTime = slot.textContent;
@@ -406,6 +426,7 @@ $user_name = $_SESSION['fullname'] ?? '';
         // Load booked slots initially
         loadBookedSlots();
     </script>
+
 
 </body>
 
