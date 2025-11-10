@@ -235,21 +235,18 @@
 
         <form action="save-booking.php" method="POST">
 
-            <label>Cardholder Name *</label>
-            <input type="text" placeholder="John Doe" required>
+            <label> Name *</label>
+            <input type="text" placeholder="Abaya Rana Magar" required>
 
-            <label>Card Number *</label>
-            <input type="text" maxlength="19" placeholder="4532 1234 5678 9010" required>
+            <label>Esewa ID *</label>
+            <input type="text" maxlength="19" placeholder="9812345678" required>
 
             <div class="row">
                 <div style="flex:1">
-                    <label>Expiry Date *</label>
+                    <label>Esewa MPIN *</label>
                     <input type="text" placeholder="MM/YY" maxlength="5" required>
                 </div>
-                <div style="flex:1">
-                    <label>CVV *</label>
-                    <input type="password" maxlength="3" placeholder="123" required>
-                </div>
+
             </div>
             <input type="hidden" name="service_name" value="" id="service_name_input">
             <input type="hidden" name="barber_name" value="" id="barber_name_input">
