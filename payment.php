@@ -231,7 +231,7 @@
         <div class="section-title">
             💳 Payment Details
         </div>
-        <p style="color:#6e6a64; font-size:14px;">Enter your card information to complete the deposit payment</p>
+        <p style="color:#6e6a64; font-size:14px;">Enter your Esewa Details to complete the deposit payment</p>
 
         <form action="save-booking.php" method="POST">
 
@@ -244,7 +244,7 @@
             <div class="row">
                 <div style="flex:1">
                     <label>Esewa MPIN *</label>
-                    <input type="text" placeholder="MM/YY" maxlength="5" required>
+                    <input type="text" placeholder="1234" maxlength="5" required>
                 </div>
 
             </div>

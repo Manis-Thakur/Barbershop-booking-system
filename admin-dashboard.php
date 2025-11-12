@@ -1,13 +1,38 @@
-
 <?php
 session_start();
 if (!isset($_SESSION['admin_name'])) {
     header("Location: admin-login.html");
     exit();
 }
+
+// Database connection
+$conn = new mysqli("localhost", "root", "", "groomease");
+if ($conn->connect_error) {
+    die("Database connection failed: " . $conn->connect_error);
+}
+
+// Handle status updates
+if (isset($_POST['update_status'])) {
+    $booking_id = $_POST['booking_id'];
+    $new_status = $_POST['new_status'];
+
+    $stmt = $conn->prepare("UPDATE bookings SET status = ? WHERE id = ?");
+    $stmt->bind_param("si", $new_status, $booking_id);
+    $stmt->execute();
+    $stmt->close();
+}
+
+// Dashboard stats
+$today = date("Y-m-d");
+$weekStart = date("Y-m-d", strtotime('monday this week'));
+$weekEnd = date("Y-m-d", strtotime('sunday this week'));
+
+$todayAppointments = $conn->query("SELECT COUNT(*) AS count FROM bookings WHERE booking_date = '$today'")->fetch_assoc()['count'];
+$thisWeekAppointments = $conn->query("SELECT COUNT(*) AS count FROM bookings WHERE booking_date BETWEEN '$weekStart' AND '$weekEnd'")->fetch_assoc()['count'];
+
+// Fetch appointments
+$appointments = $conn->query("SELECT id, service_name, barber_name, booking_date, booking_time, payment_amount, status FROM bookings ORDER BY booking_date DESC");
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -17,6 +42,92 @@ if (!isset($_SESSION['admin_name'])) {
     <title>Admin Dashboard</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
     <link rel="stylesheet" href="css/admin.css">
+    <style>
+        .appointment-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fff;
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .app-left {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dnt {
+            color: #6b4e3d;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .status {
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .pending {
+            background-color: #fff5c4;
+            color: #856404;
+        }
+
+        .confirmed {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .completed {
+            background-color: #cce5ff;
+            color: #004085;
+        }
+
+        .cancelled {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .actions {
+            position: relative;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+        .dropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            background: #fff;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .dropdown button {
+            background: none;
+            border: none;
+            width: 160px;
+            text-align: left;
+            padding: 10px 15px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .dropdown button:hover {
+            background-color: #f5f0eb;
+        }
+    </style>
 </head>
 
 <body>
@@ -25,12 +136,9 @@ if (!isset($_SESSION['admin_name'])) {
         <div class="logo">
             <div class="logo-icon">✂</div>
             <div>
-                <?php if (isset($_SESSION['admin_name'])): ?>
-                    <h2 class="welcome-text"><?php echo htmlspecialchars($_SESSION['admin_name']); ?></h2>
-                <?php endif; ?>
+                <h2 class="welcome-text"><?php echo htmlspecialchars($_SESSION['admin_name']); ?></h2>
             </div>
         </div>
-
 
         <div class="nav-buttons">
             <a href="index.php" class="btn-light">View customer site</a>
@@ -42,175 +150,202 @@ if (!isset($_SESSION['admin_name'])) {
 
         <!-- Stats -->
         <div class="stats-grid">
-            <div class="card"><span class="card-label">Today's Appointments</span><span class="card-value">2</span>
+            <div class="card">
+                <span class="card-label">Today's Appointments</span>
+                <span class="card-value"><?php echo $todayAppointments; ?></span>
             </div>
-            <div class="card"><span class="card-label">This Week</span><span class="card-value">3</span></div>
-            <div class="card"><span class="card-label">Active Barbers</span><span class="card-value">3</span></div>
+            <div class="card">
+                <span class="card-label">This Week</span>
+                <span class="card-value"><?php echo $thisWeekAppointments; ?></span>
+            </div>
+            <div class="card">
+                <span class="card-label">Active Barbers</span>
+                <span class="card-value">3</span>
+            </div>
         </div>
 
         <!-- Tabs -->
         <div class="tabs">
             <div class="tab active" onclick="switchTab('appointments')">Appointments</div>
-            <div class="tab" onclick="switchTab('schedule')">Schedule</div>
+            <div class="tab" onclick="switchTab('barbers')">Barbers</div>
             <div class="tab" onclick="switchTab('customers')">Customers</div>
         </div>
 
-        <!-- Tab Content Sections -->
+        <!-- Appointments Section -->
         <section id="appointments-section">
-            <div class="appointment-card">
-                <div class="app-left">
-                    <span><strong>Classic Haircut - Barber One</strong></span>
-                    <div class="dnt"><span class="material-symbols-outlined">
-                            calendar_month
-                        </span> Oct 27, 2025 — ⏱ 5:00 PM</div>
-                </div>
-                <span class="status confirmed">Confirmed</span>
-            </div>
+            <?php if ($appointments->num_rows > 0): ?>
+                <?php while ($row = $appointments->fetch_assoc()): ?>
+                    <?php
+                    $date = date("M d, Y", strtotime($row['booking_date']));
+                    $time = date("g:i A", strtotime($row['booking_time']));
+                    $statusClass = strtolower($row['status']);
+                    ?>
+                    <div class="appointment-card">
+                        <div class="app-left">
+                            <span><strong><?php echo htmlspecialchars($row['service_name']); ?></strong> with
+                                <?php echo htmlspecialchars($row['barber_name']); ?></span>
+                            <div class="dnt">
+                                <span class="material-symbols-outlined">calendar_month</span>
+                                <?php echo $date; ?> — ⏱ <?php echo $time; ?>
+                            </div>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:15px;">
+                            <span
+                                class="status <?php echo $statusClass; ?>"><?php echo htmlspecialchars($row['status']); ?></span>
+                            <strong>₹<?php echo htmlspecialchars($row['payment_amount']); ?></strong>
+                            <div class="actions">
+                                <button class="action-btn" onclick="toggleDropdown(this)">⋮</button>
+                                <div class="dropdown">
+                                    <form method="POST">
+                                        <input type="hidden" name="booking_id" value="<?php echo $row['id']; ?>">
+                                        <input type="hidden" name="new_status" value="Confirmed">
+                                        <button type="submit" name="update_status">Mark Confirmed</button>
+                                    </form>
+                                    <form method="POST">
+                                        <input type="hidden" name="booking_id" value="<?php echo $row['id']; ?>">
+                                        <input type="hidden" name="new_status" value="Completed">
+                                        <button type="submit" name="update_status">Mark Completed</button>
+                                    </form>
+                                    <form method="POST">
+                                        <input type="hidden" name="booking_id" value="<?php echo $row['id']; ?>">
+                                        <input type="hidden" name="new_status" value="Cancelled">
+                                        <button type="submit" name="update_status">Cancel Appointment</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <?php endwhile; ?>
+            <?php else: ?>
+                <p style="margin: 20px;">No appointments found.</p>
+            <?php endif; ?>
+        </section>
 
-            <div class="appointment-card">
-                <div class="app-left">
-                    <span><strong>Classic Haircut - Barber One</strong></span>
-                    <div class="dnt"><span class="material-symbols-outlined">
-                            calendar_month
-                        </span> Oct 27, 2025 — ⏱ 5:00 PM</div>
-                </div>
-                <span class="status pending">Pending</span>
+        <!-- Barbers Section -->
+        <section id="barbers-section" style="display:none; margin-top:25px;">
+            <div class="barbers-grid" style="display: flex; gap: 20px; flex-wrap: wrap;">
+                <?php
+                // Fetch all barbers from the database
+                $barbers = $conn->query("SELECT * FROM barbers ORDER BY name ASC");
+
+                if ($barbers && $barbers->num_rows > 0) {
+                    while ($b = $barbers->fetch_assoc()) {
+                        $barberId = $b['id']; // Make sure you have an `id` column
+                        $barberName = htmlspecialchars($b['name']);
+                        $initials = strtoupper(substr($barberName, 0, 2));
+                        $specialty = htmlspecialchars($b['specialty']);
+                        $experience = htmlspecialchars($b['experience'] ?? 'N/A');
+                        $status = htmlspecialchars($b['status'] ?? 'active');
+
+                        echo "<div class='barber-card' id='barber-{$barberId}' style='background:#fff; border-radius:15px; padding:20px; width:320px; box-shadow:0 2px 6px rgba(0,0,0,0.08);'>
+                    <div style='display:flex; align-items:center; gap:12px;'>
+                        <div class='avatar' style='background:#f5f0eb; width:45px; height:45px; border-radius:50%; display:flex; justify-content:center; align-items:center; font-weight:bold; color:#3e2e1f; font-size:16px;'>{$initials}</div>
+                        <div>
+                            <strong style='font-size:16px;'>{$barberName}</strong>
+                            <div class='specialty' style='color:#8a7663; font-size:14px;'>{$specialty}</div>
+                        </div>
+                    </div>
+                    <div style='margin-top:15px; color:#7a6656; font-size:14px;'>
+                        <p><strong>Experience:</strong> {$experience} years</p>
+                        <p><strong>Status:</strong> " . ucfirst($status) . "</p>
+                    </div>
+                    <button class='remove-btn' data-id='{$barberId}' style='margin-top:10px; padding:8px 12px; background:#c0392b; color:#fff; border:none; border-radius:6px; cursor:pointer;'>Remove</button>
+                </div>";
+                    }
+                } else {
+                    echo "<p>No barbers found in the database.</p>";
+                }
+                ?>
             </div>
         </section>
 
-        <section id="schedule-section" style="display:none; margin-top:25px;">
-            <div class="schedule-grid">
-
-                <!-- Barber 1 -->
-                <div class="schedule-card">
-                    <div class="barber-info">
-                        <div class="avatar">MJ</div>
-                        <div>
-                            <strong>Mike Johnson</strong>
-                            <div class="specialty">Classic Cuts</div>
-                        </div>
-                    </div>
-
-                    <div class="schedule-appt">
-                        <div>
-                            <span><strong>John Smith</strong></span><br>
-                            <small>Classic Haircut</small>
-                        </div>
-                        <div style="text-align:right;">
-                            <span>10:00 AM</span><br>
-                            <small>Oct 14</small>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Barber 2 -->
-                <div class="schedule-card">
-                    <div class="barber-info">
-                        <div class="avatar">AR</div>
-                        <div>
-                            <strong>Alex Rodriguez</strong>
-                            <div class="specialty">Modern Styles</div>
-                        </div>
-                    </div>
-
-                    <div class="schedule-appt">
-                        <div>
-                            <span><strong>David Wilson</strong></span><br>
-                            <small>Cut & Beard Combo</small>
-                        </div>
-                        <div style="text-align:right;">
-                            <span>11:30 AM</span><br>
-                            <small>Oct 14</small>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Barber 3 / Empty -->
-                <div class="schedule-card">
-                    <div class="barber-info">
-                        <div class="avatar">SW</div>
-                        <div>
-                            <strong>Sam Wilson</strong>
-                            <div class="specialty">Beard Expert</div>
-                        </div>
-                    </div>
-
-                    <div class="empty-msg">
-                        No appointments scheduled
-                    </div>
-                </div>
-
-            </div>
-        </section>
 
 
+
+        <!-- Customers Section -->
         <section id="customers-section" style="display:none; margin-top:25px;">
             <div class="customers-container">
                 <h2>Customer Database</h2>
                 <p>View and manage customer information</p>
+                <?php
+                $customers = $conn->query("SELECT c.id, c.name, c.phone, c.email, COUNT(b.id) AS total_appointments, MAX(b.booking_date) AS last_visit 
+                                           FROM users c 
+                                           LEFT JOIN bookings b ON c.id = b.customer_id 
+                                           GROUP BY c.id 
+                                           ORDER BY c.name ASC");
+                if ($customers->num_rows > 0) {
+                    while ($cust = $customers->fetch_assoc()) {
+                        $initials = strtoupper(substr($cust['name'], 0, 2));
+                        $lastVisit = $cust['last_visit'] ? date("M d, Y", strtotime($cust['last_visit'])) : "N/A";
 
-                <!-- Customer Row -->
-                <div class="customer-card unknown">
-                    <div class="customer-left">
-                        <div class="initials">?</div>
-                        <div class="icons">
-                            <span>📞</span>
-                            <span>✉️</span>
-                        </div>
-                    </div>
-                    <div class="customer-right">
-                        <strong>4 appointments</strong><br>
-                        <small>Last visit: Oct 27, 2025</small>
-                    </div>
-                </div>
-
-                <!-- Customer Row -->
-                <div class="customer-card">
-                    <div class="customer-left">
-                        <div class="initials">DW</div>
-                        <div>
-                            <strong>David Wilson</strong><br>
-                            <span>📞 (555) 987-6543</span> &nbsp;
-                            ✉️ david@example.com
-                        </div>
-                    </div>
-                    <div class="customer-right">
-                        <strong>1 appointments</strong><br>
-                        <small>Last visit: Oct 14, 2025</small>
-                    </div>
-                </div>
-
-                <!-- Customer Row -->
-                <div class="customer-card">
-                    <div class="customer-left">
-                        <div class="initials">JS</div>
-                        <div>
-                            <strong>John Smith</strong><br>
-                            <span>📞 (555) 123-4567</span> &nbsp;
-                            ✉️ john@example.com
-                        </div>
-                    </div>
-                    <div class="customer-right">
-                        <strong>1 appointments</strong><br>
-                        <small>Last visit: Oct 14, 2025</small>
-                    </div>
-                </div>
-
+                        echo "<div class='customer-card'>
+                                <div class='customer-left'>
+                                    <div class='initials'>{$initials}</div>
+                                    <div>
+                                        <strong>{$cust['name']}</strong><br>
+                                        <span>📞 {$cust['phone']}</span> &nbsp; ✉️ {$cust['email']}
+                                    </div>
+                                </div>
+                                <div class='customer-right'>
+                                    <strong>{$cust['total_appointments']} appointments</strong><br>
+                                    <small>Last visit: {$lastVisit}</small>
+                                </div>
+                            </div>";
+                    }
+                } else {
+                    echo "<p>No customers found.</p>";
+                }
+                ?>
             </div>
         </section>
 
-
     </div>
-
     <script>
         function switchTab(tabName) {
             document.querySelectorAll(".tab").forEach(tab => tab.classList.remove("active"));
             document.querySelectorAll("section").forEach(sec => sec.style.display = "none");
-
             document.querySelector(`[onclick="switchTab('${tabName}')"]`).classList.add("active");
             document.querySelector(`#${tabName}-section`).style.display = "block";
         }
+
+        function toggleDropdown(btn) {
+            const dropdown = btn.nextElementSibling;
+            const all = document.querySelectorAll('.dropdown');
+            all.forEach(d => { if (d !== dropdown) d.style.display = 'none'; });
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        }
+
+        window.addEventListener('click', function (e) {
+            if (!e.target.closest('.actions')) {
+                document.querySelectorAll('.dropdown').forEach(d => d.style.display = 'none');
+            }
+        });
+
+
+        document.querySelectorAll('.remove-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const barberId = btn.dataset.id;
+                if (confirm("Are you sure you want to remove this barber?")) {
+                    fetch('remove_barber.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: 'id=' + barberId
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                // Remove the card from frontend
+                                const card = document.getElementById('barber-' + barberId);
+                                card.remove();
+                            } else {
+                                alert("Error: " + data.message);
+                            }
+                        });
+                }
+            });
+        });
     </script>
+
 
 </body>
 

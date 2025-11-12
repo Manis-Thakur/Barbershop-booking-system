@@ -3,6 +3,14 @@ session_start();
 
 // You can display the user's name in navbar if logged in
 $user_name = $_SESSION['fullname'] ?? '';
+
+
+$conn = new mysqli("localhost", "root", "", "groomease");
+if ($conn->connect_error) {
+    die("Database connection failed: " . $conn->connect_error);
+}
+
+$barbers = $conn->query("SELECT * FROM barbers ORDER BY name ASC");
 ?>
 
 <!DOCTYPE html>
@@ -233,23 +241,24 @@ $user_name = $_SESSION['fullname'] ?? '';
     <p class="selected">Selected: <strong id="choosedService">Classic Haircut</strong></p>
 
     <div class="barber-container">
-        <div class="barber-card" id="barber-card">
-            <div class="barber-title">Manish Thakur</div>
-            <div class="barber-service">Haircuts</div>
-            <div class="barber-exp">5 years</div>
-        </div>
-
-        <div class="barber-card" id="barber-card">
-            <div class="barber-title">Anuj Acharya</div>
-            <div class="barber-service">Beard Trims</div>
-            <div class="barber-exp">3 years</div>
-        </div>
-
-        <div class="barber-card" id="barber-card">
-            <div class="barber-title">Arzun Malla</div>
-            <div class="barber-service">Styling</div>
-            <div class="barber-exp">4 years</div>
-        </div>
+        <?php
+        if ($barbers && $barbers->num_rows > 0) {
+            while ($b = $barbers->fetch_assoc()) {
+                $barberName = htmlspecialchars($b['name']);
+                $specialty = htmlspecialchars($b['specialty']);
+                $experience = htmlspecialchars($b['experience'] ?? 'N/A');
+                echo "
+            <div class='barber-card'>
+                <div class='barber-title'>{$barberName}</div>
+                <div class='barber-service'>{$specialty}</div>
+                <div class='barber-exp'>{$experience} years</div>
+            </div>
+            ";
+            }
+        } else {
+            echo "<p>No barbers available at the moment.</p>";
+        }
+        ?>
     </div>
 
     <a href="Booking.php" class="back-btn">Back to Services</a>

@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Insert booking
-    $status = 'Confirmed';
+    $status = 'Waiting for Confirmation';
     $payment_status = 'Paid';
 
 
