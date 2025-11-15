@@ -9,6 +9,9 @@ if (!isset($_SESSION['user_id'])) {
 
 // You can display the user's name in navbar if logged in
 $user_name = $_SESSION['fullname'] ?? '';
+
+$conn = new mysqli("localhost", "root", "", "groomease");
+$services = $conn->query("SELECT * FROM services ORDER BY service_id DESC");
 ?>
 
 
@@ -241,67 +244,43 @@ $user_name = $_SESSION['fullname'] ?? '';
         <p>Select the service you'd like to book</p>
 
         <div class="service-grid" id="service-grid">
-            <div class="card">
-                <img src="images/classich.jpg   " alt="Classic Haircut">
-                <div class="card-body">
-                    <h3>Classic Haircut</h3>
-                    <div class="card-info">
-                        <span>⏱️ 30 minutes</span>
-                        <span class="price">₹250</span>
-                    </div>
-                </div>
-            </div>
 
-            <div class="card" id="service-grid">
-                <img src="images/beard.jpg" alt="Beard Trim">
-                <div class="card-body">
-                    <h3>Beard Trim</h3>
-                    <div class="card-info">
-                        <span>⏱️ 20 minutes</span>
-                        <span class="price">₹150</span>
-                    </div>
-                </div>
-            </div>
+            <?php while ($row = $services->fetch_assoc()): ?>
+                <div class="card" data-name="<?= $row['service_name'] ?>" data-price="<?= $row['price'] ?>"
+                    data-duration="<?= $row['duration'] ?> minutes">
 
-            <div class="card" id="service-grid">
-                <img src="images/cut and beard.webp" alt="Cut & Beard Combo">
-                <div class="card-body">
-                    <h3>Cut & Beard Combo</h3>
-                    <div class="card-info">
-                        <span>⏱️ 45 minutes</span>
-                        <span class="price">₹500</span>
+                    <img src="images/<?= $row['service_image'] ?>" alt="<?= $row['service_name'] ?>">
+
+                    <div class="card-body">
+                        <h3><?= $row['service_name'] ?></h3>
+
+                        <div class="card-info">
+                            <span>⏱️ <?= $row['duration'] ?> minutes</span>
+                            <span class="price">₹<?= $row['price'] ?></span>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="card" id="service-grid">
-                <img src="images/haircolor.jpg" alt="hair color">
-                <div class="card-body">
-                    <h3>Hair Colour</h3>
-                    <div class="card-info">
-                        <span>⏱️ 45 minutes</span>
-                        <span class="price">₹1,500</span>
-                    </div>
-                </div>
-            </div>
+            <?php endwhile; ?>
         </div>
     </section>
-
     <script>
-        document.getElementById('service-grid').addEventListener('click', function (e) {
-            let card = e.target.closest('.card');
+        document.getElementById("service-grid").addEventListener("click", function (e) {
+            let card = e.target.closest(".card");
+
             if (card) {
-                let serviceName = card.querySelector('h3').innerText;
-                let price = card.querySelector('.price').innerText;
-                let duration = card.querySelector('.card-info span').innerText;
-                // Store selected service in localStorage
-                localStorage.setItem('selectedService', serviceName);
-                localStorage.setItem('selectedPrice', price);
-                localStorage.setItem('selectedDuration', duration);
-                // Redirect to the next booking step
-                window.location.href = 'booking2.php';
+                let serviceName = card.dataset.name;
+                let price = card.dataset.price;
+                let duration = card.dataset.duration;
+
+                localStorage.setItem("selectedService", serviceName);
+                localStorage.setItem("selectedPrice", price);
+                localStorage.setItem("selectedDuration", duration);
+
+                window.location.href = "booking2.php";
             }
-        }); 
+        });
     </script>
+
 
 </body>
 

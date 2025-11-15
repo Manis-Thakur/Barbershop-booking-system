@@ -1,7 +1,5 @@
 <?php
 session_start();
-
-// You can display the user's name in navbar if logged in
 $user_name = $_SESSION['fullname'] ?? '';
 ?>
 
@@ -13,6 +11,7 @@ $user_name = $_SESSION['fullname'] ?? '';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Appointments | GroomEase</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -205,7 +204,7 @@ $user_name = $_SESSION['fullname'] ?? '';
 
     <script>
         // Fetch appointments dynamically
-        fetch("get-appointments.php")
+        fetch("get-appointment.php")
             .then(res => res.json())
             .then(data => {
                 const container = document.getElementById("appointments-container");
@@ -217,21 +216,25 @@ $user_name = $_SESSION['fullname'] ?? '';
                 data.forEach(app => {
                     const div = document.createElement("div");
                     div.className = "appointment-card";
-                    div.innerHTML = `
-                        <div class="appointment-left">
-                            <img src="https://cdn-icons-png.flaticon.com/512/2920/2920244.png" alt="">
-                            <div class="appointment-details">
-                                <h3>${app.service_name}</h3>
-                                <p>with ${app.barber_name}</p>
-                                <p>${app.booking_date} &nbsp;&nbsp; ${app.booking_time}</p>
-                                <p>${app.duration} min</p>
-                            </div>
-                        </div>
-                        <div class="appointment-right">
-                            <span class="status">${app.status}</span>
-                            <div class="price">₹${app.price}</div>
-                        </div>
-                    `;
+                    div.innerHTML = div.innerHTML = `
+    <div class="appointment-left">
+        <div><span class="material-symbols-outlined">
+content_cut
+</span></div>
+
+        <div class="appointment-details">
+            <h3>${app.service_name}</h3>
+            <p>with ${app.barber_name}</p>
+            <p>${app.booking_date} &nbsp;&nbsp; ${app.booking_time}</p>
+            
+        </div>
+    </div>
+    <div class="appointment-right">
+        <span class="status">${app.status}</span>
+        <div class="price">₹${app.payment_amount}</div>
+
+    </div>
+`;
                     container.appendChild(div);
                 });
             })

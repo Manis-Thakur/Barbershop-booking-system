@@ -26,6 +26,7 @@ session_start();
         <div class="nav-links">
             <?php if (isset($_SESSION['fullname'])): ?>
                 <span class="welcome-text">Welcome, <?php echo htmlspecialchars($_SESSION['fullname']); ?>!</span>
+                <a href="my-appointment.php" class="btn btn-outline">My Appointments</a>
                 <a href="logout.php" class="btn btn-outline">Logout</a>
             <?php else: ?>
                 <a href="login.html" class="btn btn-outline">Sign In</a>

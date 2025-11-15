@@ -27,7 +27,12 @@ $today = date("Y-m-d");
 $weekStart = date("Y-m-d", strtotime('monday this week'));
 $weekEnd = date("Y-m-d", strtotime('sunday this week'));
 
-$todayAppointments = $conn->query("SELECT COUNT(*) AS count FROM bookings WHERE booking_date = '$today'")->fetch_assoc()['count'];
+$todayAppointments = $conn->query("
+    SELECT COUNT(*) AS count 
+    FROM bookings 
+    WHERE DATE(booking_date) = CURDATE()
+")->fetch_assoc()['count'];
+
 $thisWeekAppointments = $conn->query("SELECT COUNT(*) AS count FROM bookings WHERE booking_date BETWEEN '$weekStart' AND '$weekEnd'")->fetch_assoc()['count'];
 
 // Fetch appointments
@@ -127,24 +132,37 @@ $appointments = $conn->query("SELECT id, service_name, barber_name, booking_date
         .dropdown button:hover {
             background-color: #f5f0eb;
         }
+
+        .addBarber {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 15px;
+            background-color: #3e2e1f;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: background-color 0.3s ease;
+        }
     </style>
 </head>
 
 <body>
 
     <header class="navbar">
-        <div class="logo">
-            <div class="logo-icon">✂</div>
-            <div>
-                <h2 class="welcome-text"><?php echo htmlspecialchars($_SESSION['admin_name']); ?></h2>
-            </div>
+    <div class="logo">
+        <div class="logo-icon">✂</div>
+        <div>
+            <h2 class="welcome-text"><?php echo htmlspecialchars($_SESSION['admin_name']); ?></h2>
         </div>
+    </div>
 
-        <div class="nav-buttons">
-            <a href="index.php" class="btn-light">View customer site</a>
-            <a href="admin-logout.php" class="btn-light">Sign out</a>
-        </div>
-    </header>
+    <div class="nav-buttons">
+        <a href="manage-service.php" class="btn-light"> Service</a>
+        <a href="index.php" class="btn-light">View customer site</a>
+        <a href="admin-logout.php" class="btn-light">Sign out</a>
+    </div>
+</header>
+
 
     <div class="dashboard-container">
 
@@ -257,6 +275,9 @@ $appointments = $conn->query("SELECT id, service_name, barber_name, booking_date
                 }
                 ?>
             </div>
+            <div style="text-align: center; margin-top: 20px;">
+                <a href="add_barber.php" class="addBarber">Add Barber</a>
+            </div>
         </section>
 
 
@@ -267,30 +288,43 @@ $appointments = $conn->query("SELECT id, service_name, barber_name, booking_date
             <div class="customers-container">
                 <h2>Customer Database</h2>
                 <p>View and manage customer information</p>
+
                 <?php
-                $customers = $conn->query("SELECT c.id, c.name, c.phone, c.email, COUNT(b.id) AS total_appointments, MAX(b.booking_date) AS last_visit 
-                                           FROM users c 
-                                           LEFT JOIN bookings b ON c.id = b.customer_id 
-                                           GROUP BY c.id 
-                                           ORDER BY c.name ASC");
+                $customers = $conn->query("
+            SELECT u.id, u.fullname, u.phone, u.email,
+                   COUNT(b.id) AS total_appointments,
+                   MAX(b.booking_date) AS last_visit
+            FROM users u
+            LEFT JOIN bookings b ON u.id = b.user_id
+            GROUP BY u.id
+            ORDER BY u.fullname ASC
+        ");
+
+                if (!$customers) {
+                    die('SQL Error: ' . $conn->error);
+                }
+
                 if ($customers->num_rows > 0) {
                     while ($cust = $customers->fetch_assoc()) {
-                        $initials = strtoupper(substr($cust['name'], 0, 2));
+
+                        $initials = strtoupper(substr($cust['fullname'], 0, 2));
                         $lastVisit = $cust['last_visit'] ? date("M d, Y", strtotime($cust['last_visit'])) : "N/A";
 
-                        echo "<div class='customer-card'>
-                                <div class='customer-left'>
-                                    <div class='initials'>{$initials}</div>
-                                    <div>
-                                        <strong>{$cust['name']}</strong><br>
-                                        <span>📞 {$cust['phone']}</span> &nbsp; ✉️ {$cust['email']}
-                                    </div>
-                                </div>
-                                <div class='customer-right'>
-                                    <strong>{$cust['total_appointments']} appointments</strong><br>
-                                    <small>Last visit: {$lastVisit}</small>
-                                </div>
-                            </div>";
+                        echo "
+                    <div class='customer-card'>
+                        <div class='customer-left'>
+                            <div class='initials'>{$initials}</div>
+                            <div>
+                                <strong>{$cust['fullname']}</strong><br>
+                                <span>📞 {$cust['phone']}</span> &nbsp; ✉️ {$cust['email']}
+                            </div>
+                        </div>
+                        <div class='customer-right'>
+                            <strong>{$cust['total_appointments']} appointments</strong><br>
+                            <small>Last visit: {$lastVisit}</small>
+                        </div>
+                    </div>
+                ";
                     }
                 } else {
                     echo "<p>No customers found.</p>";
@@ -298,6 +332,8 @@ $appointments = $conn->query("SELECT id, service_name, barber_name, booking_date
                 ?>
             </div>
         </section>
+
+
 
     </div>
     <script>

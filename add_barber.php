@@ -34,36 +34,99 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        .center-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+            width: 100%;
+        }
+
+
+        .add-section {
+            background: #fdf8f2;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .add-section h2 {
+            margin-bottom: 15px;
+            color: #3e2e1f;
+            font-size: 22px;
+        }
+
+        /* Form */
+        .add-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Inputs */
+        .add-form input,
+        .add-form select {
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #d6c8b8;
+            background: #fff;
+            font-size: 15px;
+            color: #3e2e1f;
+            transition: 0.2s ease;
+        }
+
+        .add-form input:focus,
+        .add-form select:focus {
+            border-color: #3e2e1f;
+            outline: none;
+            box-shadow: 0 0 4px rgba(62, 46, 31, 0.2);
+        }
+
+        /* Submit Button */
+        .btn-submit {
+            padding: 12px;
+            background: #3e2e1f;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            transition: 0.3s ease;
+        }
+
+        .btn-submit:hover {
+            background: #2c1f14;
+        }
+    </style>
 </head>
 
 <body>
 
     <!-- Add Barber Section -->
+    <div class="center-wrapper">
+        <section id="add-barber-section" class="add-section">
+            <h2>Add New Barber</h2>
 
-    <section id="add-barber-section"
-        style="margin-top:25px; background:#fdf8f2; padding:20px; border-radius:15px; box-shadow:0 2px 6px rgba(0,0,0,0.08);">
-        <h2 style="margin-bottom:15px; color:#3e2e1f;">Add New Barber</h2>
-        <form action="add_barber.php" method="POST"
-            style="display:flex; flex-direction:column; gap:12px; max-width:400px;">
-            <input type="text" name="name" placeholder="Barber Name" required
-                style="padding:8px; border-radius:6px; border:1px solid #ccc;">
-            <input type="text" name="specialty" placeholder="Specialty" required
-                style="padding:8px; border-radius:6px; border:1px solid #ccc;">
-            <input type="number" name="experience" placeholder="Experience (years)" min="0"
-                style="padding:8px; border-radius:6px; border:1px solid #ccc;">
-            <input type="email" name="email" placeholder="Email" required
-                style="padding:8px; border-radius:6px; border:1px solid #ccc;">
-            <input type="tel" name="phone" placeholder="Phone Number" required
-                style="padding:8px; border-radius:6px; border:1px solid #ccc;">
-            <select name="status" style="padding:8px; border-radius:6px; border:1px solid #ccc;">
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
-            </select>
-            <button type="submit"
-                style="padding:10px; background:#3e2e1f; color:#fff; border:none; border-radius:6px; cursor:pointer;">Add
-                Barber</button>
-        </form>
-    </section>
+            <form action="add_barber.php" method="POST" class="add-form">
+                <input type="text" name="name" placeholder="Barber Name" required>
+                <input type="text" name="specialty" placeholder="Specialty" required>
+                <input type="number" name="experience" placeholder="Experience (years)" min="0" required>
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="tel" name="phone" placeholder="Phone Number" required>
+
+                <select name="status">
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+
+                <button type="submit" class="btn-submit">Add Barber</button>
+            </form>
+        </section>
+    </div>
+
 
 
 </body>
