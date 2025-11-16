@@ -236,15 +236,15 @@
         <form action="save-booking.php" method="POST">
 
             <label> Name *</label>
-            <input type="text" placeholder="Abaya Rana Magar" required>
+            <input type="text" placeholder="Ex: Abaya Rana Magar" required>
 
             <label>Esewa ID *</label>
-            <input type="text" maxlength="19" placeholder="9812345678" required>
+            <input type="text" maxlength="19" placeholder="Ex: 9812345678" required>
 
             <div class="row">
                 <div style="flex:1">
                     <label>Esewa MPIN *</label>
-                    <input type="text" placeholder="1234" maxlength="5" required>
+                    <input type="text" placeholder="Ex: 1234" maxlength="5" required>
                 </div>
 
             </div>

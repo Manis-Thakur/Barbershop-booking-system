@@ -14,13 +14,20 @@ if (!isset($_SESSION['user_id'])) {
 
 $userId = $_SESSION['user_id'];
 
-$sql = "SELECT service_name, barber_name, booking_date, booking_time, status, payment_amount 
-        FROM bookings 
+$sql = "SELECT 
+            id, 
+            service_name, 
+            barber_name, 
+            booking_date, 
+            booking_time,   
+            status, 
+            payment_amount
+        FROM bookings
         WHERE user_id = ?
         ORDER BY booking_date DESC";
 
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $userId); 
+$stmt->bind_param("i", $userId);
 $stmt->execute();
 $result = $stmt->get_result();
 

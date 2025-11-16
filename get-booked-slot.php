@@ -1,30 +1,28 @@
 <?php
+
 $conn = new mysqli("localhost", "root", "", "groomease");
-if ($conn->connect_error)
-    die("Connection failed: " . $conn->connect_error);
-
-if (isset($_GET['barber_name'])) {
-    $barber = $_GET['barber_name'];
-
-    // Format time for frontend comparison
-    $stmt = $conn->prepare("
-        SELECT 
-            booking_date, 
-            DATE_FORMAT(booking_time, '%l:%i %p') AS booking_time
-        FROM bookings 
-        WHERE barber_name = ? 
-        AND status != 'cancelled'
-    ");
-    $stmt->bind_param("s", $barber);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    $booked = [];
-    while ($row = $result->fetch_assoc()) {
-        $booked[] = $row;
-    }
-
-    header('Content-Type: application/json');
-    echo json_encode($booked);
+if ($conn->connect_error) {
+    die(json_encode(["error" => "Database connection failed"]));
 }
+
+
+
+$barber_id = $_GET['barber_id'] ?? 0;
+
+$sql = "SELECT booking_date, booking_time 
+        FROM bookings 
+        WHERE barber_id = ?";
+
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $barber_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+$booked = [];
+
+while ($row = $result->fetch_assoc()) {
+    $booked[] = $row;
+}
+
+echo json_encode($booked);
 ?>

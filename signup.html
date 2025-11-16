@@ -12,7 +12,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family:  "Segoe UI", sans-serif;
+            font-family: "Segoe UI", sans-serif;
         }
 
         /* Background */
@@ -170,10 +170,13 @@
                 <input type="text" id="fullname" name="fullname" placeholder="Enter your full name" required />
 
                 <label for="email">Email Address</label>
-                <input type="email" id="email" name="email" placeholder="Enter your email" required />
+                <input type="email" id="email" name="email" placeholder="Enter your email"
+                    pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" title="Enter a valid email address"
+                    required />
 
                 <label for="phone">Phone Number</label>
-                <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required />
+                <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required
+                    pattern="[0-9]{10}" maxlength="10" title="Phone number must be exactly 10 digits" oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
 
                 <label for="password">Password</label>
                 <div class="password-field">
@@ -202,6 +205,25 @@
         toggle.addEventListener('click', () => {
             const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
             password.setAttribute('type', type);
+        });
+        document.querySelector("form").addEventListener("submit", function (e) {
+            const email = document.getElementById("email").value;
+            const phone = document.getElementById("phone").value;
+
+            const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[A-Za-z]{2,}$/;
+            const phonePattern = /^[0-9]{10}$/;
+
+            if (!emailPattern.test(email)) {
+                alert("Please enter a valid email address.");
+                e.preventDefault();
+                return;
+            }
+
+            if (!phonePattern.test(phone)) {
+                alert("Phone number must be exactly 10 digits.");
+                e.preventDefault();
+                return;
+            }
         });
     </script>
 </body>

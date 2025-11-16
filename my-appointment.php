@@ -166,6 +166,21 @@ $user_name = $_SESSION['fullname'] ?? '';
             cursor: pointer;
             font-size: 1rem;
         }
+
+        .cancel-btn {
+            margin-top: 8px;
+            background-color: #ff4d4d;
+            color: white;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .cancel-btn:hover {
+            background-color: #e63939;
+        }
     </style>
 </head>
 
@@ -229,16 +244,34 @@ content_cut
             
         </div>
     </div>
-    <div class="appointment-right">
-        <span class="status">${app.status}</span>
-        <div class="price">₹${app.payment_amount}</div>
+  <div class="appointment-right">
+    <span class="status">${app.status}</span>
+    <div class="price">₹${app.payment_amount}</div>
 
-    </div>
+    ${app.status === "Confirmed" || app.status === "Pending"
+                            ? `<button class="cancel-btn" onclick="cancelBooking(${app.id})">Cancel</button>`
+                            : `<small style="color:#999;">Not cancellable</small>`}
+</div>
+
 `;
                     container.appendChild(div);
                 });
             })
             .catch(err => console.error(err));
+
+        function cancelBooking(id) {
+            if (!confirm("Are you sure you want to cancel this appointment?")) return;
+
+            fetch("cancel-booking.php?id=" + id, { method: "GET" })
+                .then(res => res.text())
+                .then(response => {
+                    alert(response);
+                    location.reload();
+                })
+                .catch(err => console.error(err));
+        }
+
+
     </script>
 </body>
 

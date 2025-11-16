@@ -99,7 +99,7 @@ if (!$services) {
 
                 <h3><?php echo htmlspecialchars($row['service_name']); ?></h3>
                 <p>Duration: <?php echo $row['duration']; ?> mins</p>
-                <p>Price: ₹<?php echo $row['price']; ?></p>
+                <p>Price: <?php echo $row['price']; ?></p>
 
                 <a class="delete-btn" href="manage-service.php?delete=<?php echo $row['service_id']; ?>"
                     onclick="return confirm('Delete this service?');">

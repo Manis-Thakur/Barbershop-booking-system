@@ -30,13 +30,23 @@ $weekEnd = date("Y-m-d", strtotime('sunday this week'));
 $todayAppointments = $conn->query("
     SELECT COUNT(*) AS count 
     FROM bookings 
-    WHERE DATE(booking_date) = CURDATE()
+    WHERE booking_date = CURDATE()
 ")->fetch_assoc()['count'];
 
+
 $thisWeekAppointments = $conn->query("SELECT COUNT(*) AS count FROM bookings WHERE booking_date BETWEEN '$weekStart' AND '$weekEnd'")->fetch_assoc()['count'];
+$activeBarbers = $conn->query("SELECT COUNT(*) AS count FROM barbers WHERE status = 'active'")
+    ->fetch_assoc()['count'];
 
 // Fetch appointments
-$appointments = $conn->query("SELECT id, service_name, barber_name, booking_date, booking_time, payment_amount, status FROM bookings ORDER BY booking_date DESC");
+$appointments = $conn->query("
+    SELECT id, service_name, barber_name, booking_date, booking_time, payment_amount, status 
+    FROM bookings 
+    ORDER BY booking_date DESC, booking_time DESC
+");
+
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -149,19 +159,19 @@ $appointments = $conn->query("SELECT id, service_name, barber_name, booking_date
 <body>
 
     <header class="navbar">
-    <div class="logo">
-        <div class="logo-icon">✂</div>
-        <div>
-            <h2 class="welcome-text"><?php echo htmlspecialchars($_SESSION['admin_name']); ?></h2>
+        <div class="logo">
+            <div class="logo-icon">✂</div>
+            <div>
+                <h2 class="welcome-text"><?php echo htmlspecialchars($_SESSION['admin_name']); ?></h2>
+            </div>
         </div>
-    </div>
 
-    <div class="nav-buttons">
-        <a href="manage-service.php" class="btn-light"> Service</a>
-        <a href="index.php" class="btn-light">View customer site</a>
-        <a href="admin-logout.php" class="btn-light">Sign out</a>
-    </div>
-</header>
+        <div class="nav-buttons">
+            <a href="manage-service.php" class="btn-light"> Service</a>
+            <a href="index.php" class="btn-light">View customer site</a>
+            <a href="admin-logout.php" class="btn-light">Sign out</a>
+        </div>
+    </header>
 
 
     <div class="dashboard-container">
@@ -178,7 +188,7 @@ $appointments = $conn->query("SELECT id, service_name, barber_name, booking_date
             </div>
             <div class="card">
                 <span class="card-label">Active Barbers</span>
-                <span class="card-value">3</span>
+                <span class="card-value"><?php echo $activeBarbers; ?></span>
             </div>
         </div>
 

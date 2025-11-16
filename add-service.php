@@ -130,7 +130,7 @@ if (isset($_POST['submit'])) {
 
             <br><br>
 
-            <label>Price (₹):</label>
+            <label>Price :</label>
             <input type="number" name="price" required>
 
             <br><br>

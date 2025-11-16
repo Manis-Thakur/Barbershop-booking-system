@@ -62,7 +62,7 @@ session_start();
                 <img src="images/classich.jpg " alt="Classic Haircut">
                 <div class="service-info">
                     <span class="service-title">Classic Haircut</span>
-                    <span class="service-price">₹250</span>
+                    <span class="service-price">250</span>
                     <br>
                     <span class="service-time">30 minutes</span>
                 </div>
@@ -73,7 +73,7 @@ session_start();
                 <img src="images/beard.jpg" alt="Beard Trim">
                 <div class="service-info">
                     <span class="service-title">Beard Trim</span>
-                    <span class="service-price">₹150</span>
+                    <span class="service-price">150</span>
                     <br>
                     <span class="service-time">20 minutes</span>
                 </div>
@@ -84,7 +84,7 @@ session_start();
                 <img src="images/cut and beard.webp" alt="Cut & Beard Combo">
                 <div class="service-info">
                     <span class="service-title">Cut & Beard Combo</span>
-                    <span class="service-price">₹500</span>
+                    <span class="service-price">500</span>
                     <br>
                     <span class="service-time">45 minutes</span>
                 </div>

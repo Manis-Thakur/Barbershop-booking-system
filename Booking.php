@@ -256,7 +256,7 @@ $services = $conn->query("SELECT * FROM services ORDER BY service_id DESC");
 
                         <div class="card-info">
                             <span>⏱️ <?= $row['duration'] ?> minutes</span>
-                            <span class="price">₹<?= $row['price'] ?></span>
+                            <span class="price"><?= $row['price'] ?></span>
                         </div>
                     </div>
                 </div>
