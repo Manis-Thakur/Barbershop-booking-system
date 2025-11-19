@@ -224,9 +224,9 @@ session_start();
             <div class="footer-col">
                 <h3>Follow Us</h3>
                 <div class="social-icons">
-                    <a href="#"><i class="fa-brands fa-facebook"></i></a>
-                    <a href="#"><i class="fa-brands fa-square-instagram"></i></a>
-                    <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a href="https://www.facebook.com/"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="https://www.instagram.com/"><i class="fa-brands fa-square-instagram"></i></a>
+                    <a href="https://www.twitter.com/"><i class="fa-brands fa-x-twitter"></i></a>
                 </div>
 
                 <div class="hours">

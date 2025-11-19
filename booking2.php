@@ -248,7 +248,7 @@ $barbers = $conn->query("SELECT * FROM barbers ORDER BY name ASC");
                 $specialty = htmlspecialchars($b['specialty']);
                 $experience = htmlspecialchars($b['experience'] ?? 'N/A');
                 echo "
-            <div class='barber-card'>
+            <div class='barber-card'  data-id='{$b['id']}'>
                 <div class='barber-title'>{$barberName}</div>
                 <div class='barber-service'>{$specialty}</div>
                 <div class='barber-exp'>{$experience} years</div>
@@ -271,7 +271,9 @@ $barbers = $conn->query("SELECT * FROM barbers ORDER BY name ASC");
     document.querySelectorAll(".barber-card").forEach(card => {
         card.addEventListener("click", () => {
             const barber = card.querySelector(".barber-title").innerText;
+            const barberId = card.getAttribute("data-id");
             localStorage.setItem("selectedBarber", barber);
+            localStorage.setItem("selectedBarberid", barberId);
             window.location.href = "booking3.php";
         });
     });

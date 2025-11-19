@@ -348,8 +348,9 @@ $email = $_SESSION['email'] ?? '';
 
         // === Fetch booked slots for this barber ===
         async function loadBookedSlots() {
+            const barberId = localStorage.getItem("selectedBarberId");
             if (!barber || barber === "No Barber Selected") return;
-            const response = await fetch(`get-booked-slot.php?barber_name=${encodeURIComponent(barber)}`);
+            const response = await fetch(`get-booked-slot.php?barber_id=${barberId}`);
             bookedSlots = await response.json();
 
             // Convert all DB times to display format for easy comparison
@@ -359,6 +360,7 @@ $email = $_SESSION['email'] ?? '';
             }));
 
             console.log("Booked Slots:", bookedSlots);
+            disableBookedSlots();
         }
 
 
@@ -444,7 +446,7 @@ $email = $_SESSION['email'] ?? '';
         });
 
         // Load booked slots initially
-        loadBookedSlots().then(() => disableBookedSlots());
+        loadBookedSlots();
 
     </script>
 

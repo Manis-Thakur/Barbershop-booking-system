@@ -198,7 +198,7 @@ $user_name = $_SESSION['fullname'] ?? '';
             <?php if (!empty($user_name)): ?>
                 <span>👋 Hi, <?php echo htmlspecialchars($user_name); ?></span>
             <?php else: ?>
-                <a href="signin.html" class="btn-light">Sign In</a>
+                <a href="login.html" class="btn-light">Sign In</a>
                 <a href="signup.html" class="btn-dark">Sign Up</a>
             <?php endif; ?>
         </div>

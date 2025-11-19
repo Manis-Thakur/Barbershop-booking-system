@@ -143,6 +143,12 @@ $appointments = $conn->query("
             background-color: #f5f0eb;
         }
 
+        .action-btn.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+
         .addBarber {
             display: inline-block;
             margin-top: 20px;
@@ -207,6 +213,11 @@ $appointments = $conn->query("
                     $date = date("M d, Y", strtotime($row['booking_date']));
                     $time = date("g:i A", strtotime($row['booking_time']));
                     $statusClass = strtolower($row['status']);
+
+                    // Check if appointment time has passed
+                    $appointmentDateTime = strtotime($row['booking_date'] . ' ' . $row['booking_time']);
+                    $currentTime = time();
+                    $isPast = $appointmentDateTime < $currentTime;
                     ?>
                     <div class="appointment-card">
                         <div class="app-left">
@@ -217,29 +228,42 @@ $appointments = $conn->query("
                                 <?php echo $date; ?> — ⏱ <?php echo $time; ?>
                             </div>
                         </div>
+
                         <div style="display:flex; align-items:center; gap:15px;">
-                            <span
-                                class="status <?php echo $statusClass; ?>"><?php echo htmlspecialchars($row['status']); ?></span>
-                            <strong>₹<?php echo htmlspecialchars($row['payment_amount']); ?></strong>
+                            <span class="status <?php echo $statusClass; ?>">
+                                <?php echo htmlspecialchars($row['status']); ?>
+                            </span>
+
+                            <strong><?php echo htmlspecialchars($row['payment_amount']); ?></strong>
+
                             <div class="actions">
-                                <button class="action-btn" onclick="toggleDropdown(this)">⋮</button>
-                                <div class="dropdown">
-                                    <form method="POST">
-                                        <input type="hidden" name="booking_id" value="<?php echo $row['id']; ?>">
-                                        <input type="hidden" name="new_status" value="Confirmed">
-                                        <button type="submit" name="update_status">Mark Confirmed</button>
-                                    </form>
-                                    <form method="POST">
-                                        <input type="hidden" name="booking_id" value="<?php echo $row['id']; ?>">
-                                        <input type="hidden" name="new_status" value="Completed">
-                                        <button type="submit" name="update_status">Mark Completed</button>
-                                    </form>
-                                    <form method="POST">
-                                        <input type="hidden" name="booking_id" value="<?php echo $row['id']; ?>">
-                                        <input type="hidden" name="new_status" value="Cancelled">
-                                        <button type="submit" name="update_status">Cancel Appointment</button>
-                                    </form>
-                                </div>
+
+                                <!-- If time passed: Disable menu -->
+                                <?php if ($isPast): ?>
+                                    <button class="action-btn disabled" disabled>⋮</button>
+
+                                <?php else: ?>
+                                    <!-- Normal Active Dropdown -->
+                                    <button class="action-btn" onclick="toggleDropdown(this)">⋮</button>
+                                    <div class="dropdown">
+                                        <form method="POST">
+                                            <input type="hidden" name="booking_id" value="<?php echo $row['id']; ?>">
+                                            <input type="hidden" name="new_status" value="Confirmed">
+                                            <button type="submit" name="update_status">Mark Confirmed</button>
+                                        </form>
+                                        <form method="POST">
+                                            <input type="hidden" name="booking_id" value="<?php echo $row['id']; ?>">
+                                            <input type="hidden" name="new_status" value="Completed">
+                                            <button type="submit" name="update_status">Mark Completed</button>
+                                        </form>
+                                        <form method="POST">
+                                            <input type="hidden" name="booking_id" value="<?php echo $row['id']; ?>">
+                                            <input type="hidden" name="new_status" value="Cancelled">
+                                            <button type="submit" name="update_status">Cancel Appointment</button>
+                                        </form>
+                                    </div>
+                                <?php endif; ?>
+
                             </div>
                         </div>
                     </div>
@@ -248,6 +272,7 @@ $appointments = $conn->query("
                 <p style="margin: 20px;">No appointments found.</p>
             <?php endif; ?>
         </section>
+
 
         <!-- Barbers Section -->
         <section id="barbers-section" style="display:none; margin-top:25px;">
