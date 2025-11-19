@@ -298,17 +298,18 @@ $user_name = $_SESSION['fullname'] ?? '';
         <div class="box">
             <h3>Choose Time</h3>
             <div class="time-slots" id="timeSlots">
-                <div class="time-slot">7:00 AM</div>
-                <div class="time-slot">8:00 AM</div>
-                <div class="time-slot">9:00 AM</div>
-                <div class="time-slot">10:00 AM</div>
-                <div class="time-slot">11:00 AM</div>
-                <div class="time-slot">12:00 PM</div>
-                <div class="time-slot">2:00 PM</div>
-                <div class="time-slot">3:00 PM</div>
-                <div class="time-slot">4:00 PM</div>
-                <div class="time-slot">5:00 PM</div>
+                <div class="time-slot" data-time="7:00 AM">7:00 AM</div>
+                <div class="time-slot" data-time="8:00 AM">8:00 AM</div>
+                <div class="time-slot" data-time="9:00 AM">9:00 AM</div>
+                <div class="time-slot" data-time="10:00 AM">10:00 AM</div>
+                <div class="time-slot" data-time="11:00 AM">11:00 AM</div>
+                <div class="time-slot" data-time="12:00 PM">12:00 PM</div>
+                <div class="time-slot" data-time="2:00 PM">2:00 PM</div>
+                <div class="time-slot" data-time="3:00 PM">3:00 PM</div>
+                <div class="time-slot" data-time="4:00 PM">4:00 PM</div>
+                <div class="time-slot" data-time="5:00 PM">5:00 PM</div>
             </div>
+
         </div>
     </div>
 
@@ -333,10 +334,14 @@ $user_name = $_SESSION['fullname'] ?? '';
         function formatTimeForDisplay(dbTime) {
             const [hour, minute] = dbTime.split(':');
             let h = parseInt(hour);
+
             const ampm = h >= 12 ? "PM" : "AM";
-            h = h % 12 || 12;
+            h = h % 12;
+            if (h === 0) h = 12;
+
             return `${h}:${minute} ${ampm}`;
         }
+
 
         // === Fetch booked slots for this barber ===
         async function loadBookedSlots() {
@@ -353,6 +358,9 @@ $user_name = $_SESSION['fullname'] ?? '';
             console.log("Booked Slots:", bookedSlots);
         }
 
+
+
+
         // === Check if this time is already booked for the selected date ===
         function isBooked(date, time) {
             return bookedSlots.some(slot => slot.booking_date === date && slot.booking_time === time);
@@ -361,17 +369,23 @@ $user_name = $_SESSION['fullname'] ?? '';
         // === Disable Booked Slots ===
         function disableBookedSlots() {
             const slots = document.querySelectorAll(".time-slot");
+
             slots.forEach(slot => {
                 slot.classList.remove("disabled");
-                const time = slot.textContent.trim();
-                if (selectedDate && isBooked(selectedDate, time)) {
+                slot.style.opacity = "1";
+                slot.style.pointerEvents = "auto";
+
+                const slotTime = slot.dataset.time;
+
+                if (selectedDate && isBooked(selectedDate, slotTime)) {
                     slot.classList.add("disabled");
-                    slot.style.opacity = "0.4";
+                    slot.style.opacity = "0.45";
                     slot.style.pointerEvents = "none";
-                    slot.title = "Already booked";
+                    slot.title = "This time is already booked";
                 }
             });
         }
+
 
         // === Calendar Setup ===
         flatpickr("#calendar", {
@@ -389,11 +403,14 @@ $user_name = $_SESSION['fullname'] ?? '';
         timeSlots.forEach(slot => {
             slot.addEventListener("click", () => {
                 if (slot.classList.contains("disabled")) return;
+
                 timeSlots.forEach(s => s.classList.remove("selected"));
+
                 slot.classList.add("selected");
-                selectedTime = slot.textContent;
+                selectedTime = slot.dataset.time;
                 updateSelectedInfo();
             });
+            ;
         });
 
         // === Display Selection ===
@@ -424,7 +441,8 @@ $user_name = $_SESSION['fullname'] ?? '';
         });
 
         // Load booked slots initially
-        loadBookedSlots();
+        loadBookedSlots().then(() => disableBookedSlots());
+
     </script>
 
 

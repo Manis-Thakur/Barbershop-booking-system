@@ -176,7 +176,8 @@
 
                 <label for="phone">Phone Number</label>
                 <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required
-                    pattern="[0-9]{10}" maxlength="10" title="Phone number must be exactly 10 digits" oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+                    pattern="(98|97)[0-9]{8}" maxlength="10" title="Phone number must be exactly 10 digits"
+                    oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
 
                 <label for="password">Password</label>
                 <div class="password-field">
@@ -202,6 +203,8 @@
         // Show/Hide password toggle
         const toggle = document.querySelector('.toggle');
         const password = document.querySelector('#password');
+
+
         toggle.addEventListener('click', () => {
             const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
             password.setAttribute('type', type);
@@ -211,7 +214,8 @@
             const phone = document.getElementById("phone").value;
 
             const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[A-Za-z]{2,}$/;
-            const phonePattern = /^[0-9]{10}$/;
+            const phonePattern = /^(98|97)[0-9]{8}$/;
+
 
             if (!emailPattern.test(email)) {
                 alert("Please enter a valid email address.");
