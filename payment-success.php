@@ -1,3 +1,16 @@
+<?php
+session_start();
+
+// Optional: Protect page — only logged-in users can confirm booking
+if (!isset($_SESSION['user_id'])) {
+    header("Location: signin.html");
+    exit();
+}
+
+$user_name = $_SESSION['fullname'] ?? '';
+$phone = $_SESSION['phone'] ?? '';
+?>
+
 <!DOCTYPE html>
 <html>
 
@@ -6,15 +19,65 @@
     <style>
         body {
             font-family: 'Segoe UI', sans-serif;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
             margin: 0;
             background-color: #faf7f2;
             color: #4d2e14;
             text-align: center;
+            display: block;
+            /* Remove flex centering */
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 8%;
+            background-color: #fff;
+            border-bottom: 1px solid #eee;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            background-color: #5a2e0f;
+            color: #fff;
+            font-size: 22px;
+            padding: 8px 15px;
+            border-radius: 8px;
+        }
+
+        .logo h2 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .logo p {
+            margin: 0;
+            font-size: 13px;
+            color: #6d5f4b;
+        }
+
+        .nav-buttons a {
+            text-decoration: none;
+            font-size: 14px;
+            margin-left: 10px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 1px solid #5a2e0f;
+        }
+
+        .btn-light {
+            background-color: #fff;
+            color: #5a2e0f;
+        }
+
+        .btn-dark {
+            background-color: #5a2e0f;
+            color: #fff;
         }
 
         h1 {
@@ -33,6 +96,16 @@
             color: #fff;
             border-radius: 8px;
             text-decoration: none;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - 100px);
+            /* full viewport minus navbar height */
+            text-align: center;
         }
 
         .container {
@@ -91,24 +164,46 @@
 </head>
 
 <body>
-    <h1>🎉 Payment Successful!</h1>
-    <p>Your booking has been confirmed. We’ll see you soon.</p>
-    <div class="container">
-        <h3>Appointment details</h3>
-        <div class="details">
-            <p id="service-name"><span>Service: </span></p>
-            <p id="barber-name"><span>Barber: </span></p>
-            <p id="date"><span>Date: </span></p>
-            <p id="time"><span>Time: </span></p>
-            <p id="duration"><span>Duration: </span></p>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="logo">
+            <div class="logo-icon">✂</div>
+            <div>
+                <h2>GroomEase</h2>
+                <p>Book Your Appointment</p>
+            </div>
         </div>
-        <hr>
-        <div class="payment">
-            <p id="totalAmount"><span>Total Amount:</span></p>
-            <p class="paid"><span>Deposit paid:</span></p>
+        <div class="nav-buttons">
+            <?php if (!empty($user_name)): ?>
+                <span>👋 Hi, <?php echo htmlspecialchars($user_name); ?></span>
+                <a href="logout.php" class="btn-light">← Back to Home</a>
+            <?php else: ?>
+                <a href="index.php" class="btn-light">← Back to Home</a>
+                <a href="signin.html" class="btn-light">Sign In</a>
+                <a href="signup.html" class="btn-dark">Sign Up</a>
+            <?php endif; ?>
         </div>
+    </header>
+    <div class="main-content">
+        <h1>🎉 Payment Successful!</h1>
+        <p>Your booking has been confirmed. We’ll see you soon.</p>
+        <div class="container">
+            <h3>Appointment details</h3>
+            <div class="details">
+                <p id="service-name"><span>Service: </span></p>
+                <p id="barber-name"><span>Barber: </span></p>
+                <p id="date"><span>Date: </span></p>
+                <p id="time"><span>Time: </span></p>
+                <p id="duration"><span>Duration: </span></p>
+            </div>
+            <hr>
+            <div class="payment">
+                <p id="totalAmount"><span>Total Amount:</span></p>
+                <p class="paid"><span>Deposit paid:</span></p>
+            </div>
+        </div>
+        <a href="index.php">Return Home</a>
     </div>
-    <a href="index.php">Return Home</a>
 </body>
 
 <script>
@@ -119,9 +214,9 @@
     document.getElementById('duration').innerHTML += `<span>${localStorage.getItem('selectedDuration')}</span>`;
 
     document.getElementById('totalAmount').innerHTML += `<span>${localStorage.getItem('selectedPrice')}</span>`;
-    document.querySelector('.paid').innerHTML += `<span>₹${localStorage.getItem('paymentAmount')}</span>`;
-    
-    
-    </script>
+    document.querySelector('.paid').innerHTML += `<span>${localStorage.getItem('paymentAmount')}</span>`;
+
+
+</script>
 
 </html>

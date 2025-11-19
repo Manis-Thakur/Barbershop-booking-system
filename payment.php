@@ -1,3 +1,16 @@
+<?php
+session_start();
+
+// Optional: Protect page — only logged-in users can confirm booking
+if (!isset($_SESSION['user_id'])) {
+    header("Location: signin.html");
+    exit();
+}
+
+$user_name = $_SESSION['fullname'] ?? '';
+$phone = $_SESSION['phone'] ?? '';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -198,9 +211,14 @@
         </div>
 
         <div class="nav-buttons">
-            <a href="index.html" class="btn-light">← Back to Home</a>
-            <a href="signin.html" class="btn-light">Sign In</a>
-            <a href="signup.html" class="btn-dark">Sign Up</a>
+            <?php if (!empty($user_name)): ?>
+                <span>👋 Hi, <?php echo htmlspecialchars($user_name); ?></span>
+                <a href="logout.php" class="btn-light">← Back to Home</a>
+            <?php else: ?>
+                <a href="index.php" class="btn-light">← Back to Home</a>
+                <a href="signin.html" class="btn-light">Sign In</a>
+                <a href="signup.html" class="btn-dark">Sign Up</a>
+            <?php endif; ?>
         </div>
     </header>
 
@@ -211,7 +229,7 @@
 
         <div class="card">
             <h3>Total Amount</h3>
-            <div class="amount" id="choosedPrice">₹800</div>
+            <div class="amount" id="choosedPrice">800</div>
         </div>
 
         <div class="card active">
@@ -236,15 +254,16 @@
         <form action="save-booking.php" method="POST">
 
             <label> Name *</label>
-            <input type="text" placeholder="Ex: Abaya Rana Magar" required>
+            <input type="text" value="<?php echo htmlspecialchars($_SESSION['fullname'] ?? ''); ?>" required>
 
             <label>Esewa ID *</label>
-            <input type="text" maxlength="19" placeholder="Ex: 9812345678" required>
+            <input type="text" maxlength="19" value="<?php echo htmlspecialchars($_SESSION['phone'] ?? ''); ?>"
+                required>
 
             <div class="row">
                 <div style="flex:1">
                     <label>Esewa MPIN *</label>
-                    <input type="text" placeholder="Ex: 1234" maxlength="5" required>
+                    <input type="text" placeholder="Ex: 123456" maxlength="6" required>
                 </div>
 
             </div>
@@ -269,10 +288,10 @@
         let displayPrice = document.getElementById('choosedPrice');
         displayPrice.innerText = localStorage.getItem('selectedPrice');
 
-        let partialAmount = parseFloat(localStorage.getItem('selectedPrice').replace('₹', '').replace(',', '')) / 2;
-        document.querySelector('.card.active .amount').innerText = `₹${partialAmount.toFixed(0)}`;
-        document.getElementById('due').innerText = `₹${partialAmount.toFixed(0)}`;
-        document.querySelector('button').innerText = `Pay ₹${partialAmount.toFixed(0)} Now`;
+        let partialAmount = parseFloat(localStorage.getItem('selectedPrice').replace('', '').replace(',', '')) / 2;
+        document.querySelector('.card.active .amount').innerText = `${partialAmount.toFixed(0)}`;
+        document.getElementById('due').innerText = `${partialAmount.toFixed(0)}`;
+        document.querySelector('button').innerText = `Pay ${partialAmount.toFixed(0)} Now`;
         localStorage.setItem('paymentAmount', partialAmount);
 
         // Store the amount in hidden input (so PHP can get it)

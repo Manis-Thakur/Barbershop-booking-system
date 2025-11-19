@@ -11,19 +11,23 @@ $email = $_POST['email'];
 $password = $_POST['password'];
 
 // Fetch user by email
-$stmt = $conn->prepare("SELECT id, fullname, password FROM users WHERE email = ?");
+$stmt = $conn->prepare(
+    "SELECT id, fullname, phone, password FROM users WHERE email = ?"
+);
 $stmt->bind_param("s", $email);
 $stmt->execute();
 $stmt->store_result();
 
 if ($stmt->num_rows > 0) {
-    $stmt->bind_result($id, $fullname, $hashed_password);
+    $stmt->bind_result($id, $fullname,$phone, $hashed_password);
     $stmt->fetch();
 
     if (password_verify($password, $hashed_password)) {
         // Set session
         $_SESSION['user_id'] = $id;
         $_SESSION['fullname'] = $fullname;
+        $_SESSION['email'] = $email;
+        $_SESSION['phone'] = $phone;
 
         // Redirect to dashboard
         header("Location: index.php");

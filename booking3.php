@@ -3,6 +3,9 @@ session_start();
 
 // You can display the user's name in navbar if logged in
 $user_name = $_SESSION['fullname'] ?? '';
+$phone = $_SESSION['phone'] ?? '';
+$email = $_SESSION['email'] ?? '';
+
 ?>
 
 <!DOCTYPE html>

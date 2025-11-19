@@ -176,8 +176,10 @@
 
                 <label for="phone">Phone Number</label>
                 <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required
-                    pattern="(98|97)[0-9]{8}" maxlength="10" title="Phone number must be exactly 10 digits"
+                    pattern="^(98|97)[0-9]{8}$" maxlength="10"
+                    title="Phone number must start with 98 or 97 and be exactly 10 digits"
                     oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+
 
                 <label for="password">Password</label>
                 <div class="password-field">

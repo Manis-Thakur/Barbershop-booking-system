@@ -8,6 +8,8 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $user_name = $_SESSION['fullname'] ?? '';
+$phone = $_SESSION['phone'] ?? '';
+$email = $_SESSION['email'] ?? '';
 ?>
 
 <!DOCTYPE html>
@@ -267,7 +269,8 @@ $user_name = $_SESSION['fullname'] ?? '';
                 </div>
                 <div style="flex:1">
                     <label>Phone Number *</label>
-                    <input type="text" name="phone" id="phone" required>
+                    <input type="text" name="phone" id="phone"
+                        value="<?php echo htmlspecialchars($_SESSION['phone'] ?? ''); ?>" required>
                 </div>
             </div>
 
@@ -278,7 +281,7 @@ $user_name = $_SESSION['fullname'] ?? '';
             <label>Special Requests (Optional)</label>
             <textarea name="notes" placeholder="Any special requests or notes for your barber..."></textarea>
 
-    
+
 
             <button type="submit">Continue to Payment</button>
         </form>

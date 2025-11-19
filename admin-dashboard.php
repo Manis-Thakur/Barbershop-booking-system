@@ -42,7 +42,7 @@ $activeBarbers = $conn->query("SELECT COUNT(*) AS count FROM barbers WHERE statu
 $appointments = $conn->query("
     SELECT id, service_name, barber_name, booking_date, booking_time, payment_amount, status 
     FROM bookings 
-    ORDER BY booking_date DESC, booking_time DESC
+    ORDER BY id DESC
 ");
 
 
