@@ -83,7 +83,7 @@ $email = $_SESSION['email'] ?? '';
         .container {
             width: 700px;
             max-width: 90%;
-            margin: 60px auto;
+            margin: 50px auto;
             background: #fff;
             padding: 30px;
             border-radius: 15px;
@@ -130,7 +130,7 @@ $email = $_SESSION['email'] ?? '';
 
         h1 {
             text-align: center;
-            margin-top: 25px;
+            margin-top: 20px;
         }
 
         p.subtitle {
@@ -223,7 +223,7 @@ $email = $_SESSION['email'] ?? '';
         <div class="nav-buttons">
             <?php if (!empty($user_name)): ?>
                 <span>👋 Hi, <?php echo htmlspecialchars($user_name); ?></span>
-                <a href="logout.php" class="btn-light">← Back to Home</a>
+                <a href="index.php" class="btn-light">← Back to Home</a>
             <?php else: ?>
                 <a href="index.php" class="btn-light">← Back to Home</a>
                 <a href="signin.html" class="btn-light">Sign In</a>
@@ -278,9 +278,6 @@ $email = $_SESSION['email'] ?? '';
             <input type="email" name="email" id="email"
                 value="<?php echo htmlspecialchars($_SESSION['email'] ?? ''); ?>" required>
 
-            <label>Special Requests (Optional)</label>
-            <textarea name="notes" placeholder="Any special requests or notes for your barber..."></textarea>
-
 
 
             <button type="submit">Continue to Payment</button>
@@ -308,6 +305,7 @@ $email = $_SESSION['email'] ?? '';
         document.getElementById("booking_date").value = date;
         document.getElementById("booking_time").value = time;
     </script>
+
 
 </body>
 

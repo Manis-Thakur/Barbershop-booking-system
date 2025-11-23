@@ -4,7 +4,6 @@ session_start();
 // You can display the user's name in navbar if logged in
 $user_name = $_SESSION['fullname'] ?? '';
 
-
 $conn = new mysqli("localhost", "root", "", "groomease");
 if ($conn->connect_error) {
     die("Database connection failed: " . $conn->connect_error);
@@ -83,7 +82,6 @@ $barbers = $conn->query("SELECT * FROM barbers ORDER BY name ASC");
             color: #fff;
         }
 
-        /* Step Progress */
         .steps {
             display: flex;
             align-items: center;
@@ -191,7 +189,7 @@ $barbers = $conn->query("SELECT * FROM barbers ORDER BY name ASC");
 </head>
 
 <body>
-    <!-- Navbar -->
+
     <header class="navbar">
         <div class="logo">
             <div class="logo-icon">✂</div>
@@ -204,7 +202,7 @@ $barbers = $conn->query("SELECT * FROM barbers ORDER BY name ASC");
         <div class="nav-buttons">
             <?php if (!empty($user_name)): ?>
                 <span>👋 Hi, <?php echo htmlspecialchars($user_name); ?></span>
-                <a href="logout.php" class="btn-light">← Back to Home</a>
+                <a href="index.php" class="btn-light">← Back to Home</a>
             <?php else: ?>
                 <a href="index.php" class="btn-light">← Back to Home</a>
                 <a href="signin.html" class="btn-light">Sign In</a>
@@ -213,8 +211,6 @@ $barbers = $conn->query("SELECT * FROM barbers ORDER BY name ASC");
         </div>
     </header>
 
-
-    <!-- Step Progress -->
     <div class="steps">
         <div class="step">
             <div class="circle">1</div>
@@ -247,13 +243,14 @@ $barbers = $conn->query("SELECT * FROM barbers ORDER BY name ASC");
                 $barberName = htmlspecialchars($b['name']);
                 $specialty = htmlspecialchars($b['specialty']);
                 $experience = htmlspecialchars($b['experience'] ?? 'N/A');
+
                 echo "
-            <div class='barber-card'  data-id='{$b['id']}'>
-                <div class='barber-title'>{$barberName}</div>
-                <div class='barber-service'>{$specialty}</div>
-                <div class='barber-exp'>{$experience} years</div>
-            </div>
-            ";
+                <div class='barber-card' data-id='{$b['id']}'>
+                    <div class='barber-title'>{$barberName}</div>
+                    <div class='barber-service'>{$specialty}</div>
+                    <div class='barber-exp'>{$experience} years</div>
+                </div>
+                ";
             }
         } else {
             echo "<p>No barbers available at the moment.</p>";
@@ -262,23 +259,27 @@ $barbers = $conn->query("SELECT * FROM barbers ORDER BY name ASC");
     </div>
 
     <a href="Booking.php" class="back-btn">Back to Services</a>
+
 </body>
 
 <script>
-    let displayService = document.getElementById('choosedService');
-    displayService.innerText = localStorage.getItem('selectedService');
+    // Display selected service
+    document.getElementById('choosedService').innerText =
+        localStorage.getItem('selectedService');
 
+    // Select barber → save → continue
     document.querySelectorAll(".barber-card").forEach(card => {
         card.addEventListener("click", () => {
-            const barber = card.querySelector(".barber-title").innerText;
+
+            const barberName = card.querySelector(".barber-title").innerText;
             const barberId = card.getAttribute("data-id");
-            localStorage.setItem("selectedBarber", barber);
-            localStorage.setItem("selectedBarberid", barberId);
+
+            localStorage.setItem("selectedBarber", barberName);
+            localStorage.setItem("selectedBarberId", barberId); // FIXED (correct name)
+
             window.location.href = "booking3.php";
         });
     });
-
 </script>
-
 
 </html>

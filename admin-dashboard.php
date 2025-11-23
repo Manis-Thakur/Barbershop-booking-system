@@ -30,8 +30,9 @@ $weekEnd = date("Y-m-d", strtotime('sunday this week'));
 $todayAppointments = $conn->query("
     SELECT COUNT(*) AS count 
     FROM bookings 
-    WHERE booking_date = CURDATE()
+    WHERE DATE(booking_date) = CURDATE()
 ")->fetch_assoc()['count'];
+
 
 
 $thisWeekAppointments = $conn->query("SELECT COUNT(*) AS count FROM bookings WHERE booking_date BETWEEN '$weekStart' AND '$weekEnd'")->fetch_assoc()['count'];

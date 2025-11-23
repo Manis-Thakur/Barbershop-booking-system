@@ -213,7 +213,7 @@ $phone = $_SESSION['phone'] ?? '';
         <div class="nav-buttons">
             <?php if (!empty($user_name)): ?>
                 <span>👋 Hi, <?php echo htmlspecialchars($user_name); ?></span>
-                <a href="logout.php" class="btn-light">← Back to Home</a>
+                <a href="index.php" class="btn-light">← Back to Home</a>
             <?php else: ?>
                 <a href="index.php" class="btn-light">← Back to Home</a>
                 <a href="signin.html" class="btn-light">Sign In</a>
@@ -267,6 +267,7 @@ $phone = $_SESSION['phone'] ?? '';
                 </div>
 
             </div>
+            <input type="hidden" name="barber_id" id="barber_id_input" value="">
             <input type="hidden" name="service_name" value="" id="service_name_input">
             <input type="hidden" name="barber_name" value="" id="barber_name_input">
             <input type="hidden" name="booking_date" value="" id="booking_date_input">
@@ -282,24 +283,30 @@ $phone = $_SESSION['phone'] ?? '';
     </div>
 
     <script>
+        const selectedPrice    = localStorage.getItem('selectedPrice') || '0';
+        const selectedService  = localStorage.getItem('selectedService') || '';
+        const selectedBarber   = localStorage.getItem('selectedBarber') || '';   // ← MUST be the barber's NAME
+        const selectedBarberId = localStorage.getItem('selectedBarberId') || ''; // ← MUST be the barber's ID
+        const bookingDate      = localStorage.getItem('bookingDate') || '';
+        const bookingTime      = localStorage.getItem('bookingTime') || '';
 
+        // Calculate 50% deposit
+        const fullPrice     = parseFloat(selectedPrice) || 0;
+        const paymentAmount = fullPrice / 2;
 
+        // Update UI
+        document.getElementById('choosedPrice').innerText = fullPrice.toFixed(0);
+        document.querySelector('.card.active .amount').innerText = paymentAmount.toFixed(0);
+        document.getElementById('due').innerText = paymentAmount.toFixed(0);
+        document.querySelector('button').innerText = `Pay ${paymentAmount.toFixed(0)} Now`;
 
-        let displayPrice = document.getElementById('choosedPrice');
-        displayPrice.innerText = localStorage.getItem('selectedPrice');
-
-        let partialAmount = parseFloat(localStorage.getItem('selectedPrice').replace('', '').replace(',', '')) / 2;
-        document.querySelector('.card.active .amount').innerText = `${partialAmount.toFixed(0)}`;
-        document.getElementById('due').innerText = `${partialAmount.toFixed(0)}`;
-        document.querySelector('button').innerText = `Pay ${partialAmount.toFixed(0)} Now`;
-        localStorage.setItem('paymentAmount', partialAmount);
-
-        // Store the amount in hidden input (so PHP can get it)
-        document.getElementById('service_name_input').value = localStorage.getItem('selectedService');
-        document.getElementById('barber_name_input').value = localStorage.getItem('selectedBarber');
-        document.getElementById('booking_date_input').value = localStorage.getItem('bookingDate');
-        document.getElementById('booking_time_input').value = localStorage.getItem('bookingTime');
-        document.getElementById('payment_amount_input').value = localStorage.getItem('paymentAmount');
+        // Fill hidden fields — THIS IS THE CRITICAL PART
+        document.getElementById('service_name_input').value    = selectedService;
+        document.getElementById('barber_name_input').value     = selectedBarber;        // ← Real name (e.g. "Abaya Rana Magar")
+        document.getElementById('barber_id_input').value       = selectedBarberId;     // ← ID (e.g. "7")
+        document.getElementById('booking_date_input').value    = bookingDate;
+        document.getElementById('booking_time_input').value    = bookingTime;
+        document.getElementById('payment_amount_input').value  = paymentAmount.toFixed(2);
     </script>
 
 </body>

@@ -8,7 +8,6 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $user_name = $_SESSION['fullname'] ?? '';
-$phone = $_SESSION['phone'] ?? '';
 ?>
 
 <!DOCTYPE html>
@@ -176,7 +175,7 @@ $phone = $_SESSION['phone'] ?? '';
         <div class="nav-buttons">
             <?php if (!empty($user_name)): ?>
                 <span>👋 Hi, <?php echo htmlspecialchars($user_name); ?></span>
-                <a href="logout.php" class="btn-light">← Back to Home</a>
+                <a href="index.php" class="btn-light">← Back to Home</a>
             <?php else: ?>
                 <a href="index.php" class="btn-light">← Back to Home</a>
                 <a href="signin.html" class="btn-light">Sign In</a>

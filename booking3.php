@@ -256,7 +256,7 @@ $email = $_SESSION['email'] ?? '';
         <div class="nav-buttons">
             <?php if (!empty($user_name)): ?>
                 <span>👋 Hi, <?php echo htmlspecialchars($user_name); ?></span>
-                <a href="logout.php" class="btn-light">← Back to Home</a>
+                <a href="index.php" class="btn-light">← Back to Home</a>
             <?php else: ?>
                 <a href="index.php" class="btn-light">← Back to Home</a> <a href="signin.html" class="btn-light">Sign In</a>
                 <a href="signup.html" class="btn-dark">Sign Up</a>
@@ -322,75 +322,50 @@ $email = $_SESSION['email'] ?? '';
         <a href="booking2.php" class="back-btn">Back to Barbers</a>
         <a id="continueBtn" class="continue-btn">Continue to Booking</a>
     </div>
-
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
-        const service = localStorage.getItem("selectedService") || "No Service Selected";
-        const barber = localStorage.getItem("selectedBarber") || "No Barber Selected";
+        const service = localStorage.getItem("selectedService") || "No Service";
+        const barber = localStorage.getItem("selectedBarber") || "No Barber";
         document.querySelector(".subtitle").innerText = `${service} with ${barber}`;
 
         let selectedDate = null;
         let selectedTime = null;
         let bookedSlots = [];
 
-        // Convert DB time (e.g., "07:00:00") to readable format (e.g., "7:00 AM")
-        function formatTimeForDisplay(dbTime) {
-            const [hour, minute] = dbTime.split(':');
-            let h = parseInt(hour);
-
-            const ampm = h >= 12 ? "PM" : "AM";
-            h = h % 12;
-            if (h === 0) h = 12;
-
-            return `${h}:${minute} ${ampm}`;
-        }
-
-
         // === Fetch booked slots for this barber ===
         async function loadBookedSlots() {
             const barberId = localStorage.getItem("selectedBarberId");
-            if (!barber || barber === "No Barber Selected") return;
-            const response = await fetch(`get-booked-slot.php?barber_id=${barberId}`);
+            if (!barberId || !selectedDate) return;
+
+            const response = await fetch(`get-booked-slot.php?barber_id=${barberId}&date=${selectedDate}`);
             bookedSlots = await response.json();
 
-            // Convert all DB times to display format for easy comparison
-            bookedSlots = bookedSlots.map(slot => ({
-                booking_date: slot.booking_date,
-                booking_time: formatTimeForDisplay(slot.booking_time)
-            }));
-
-            console.log("Booked Slots:", bookedSlots);
+            console.log("BOOKED SLOTS:", bookedSlots);
             disableBookedSlots();
         }
 
-
-
-
-        // === Check if this time is already booked for the selected date ===
+        // === Check if time is booked ===
         function isBooked(date, time) {
             return bookedSlots.some(slot => slot.booking_date === date && slot.booking_time === time);
         }
 
-        // === Disable Booked Slots ===
+        // === Disable Booked Times ===
         function disableBookedSlots() {
             const slots = document.querySelectorAll(".time-slot");
 
             slots.forEach(slot => {
                 slot.classList.remove("disabled");
-                slot.style.opacity = "1";
                 slot.style.pointerEvents = "auto";
+                slot.style.opacity = "1";
 
-                const slotTime = slot.dataset.time;
-
-                if (selectedDate && isBooked(selectedDate, slotTime)) {
+                if (selectedDate && isBooked(selectedDate, slot.dataset.time)) {
                     slot.classList.add("disabled");
-                    slot.style.opacity = "0.45";
                     slot.style.pointerEvents = "none";
-                    slot.title = "This time is already booked";
+                    slot.style.opacity = "0.4";
+                    slot.title = "Already booked";
                 }
             });
         }
-
 
         // === Calendar Setup ===
         flatpickr("#calendar", {
@@ -398,29 +373,30 @@ $email = $_SESSION['email'] ?? '';
             maxDate: new Date().fp_incr(14),
             onChange: function (selectedDates, dateStr) {
                 selectedDate = dateStr;
-                disableBookedSlots();
+                loadBookedSlots();
                 updateSelectedInfo();
             }
         });
 
         // === Time Slot Selection ===
         const timeSlots = document.querySelectorAll(".time-slot");
+
         timeSlots.forEach(slot => {
             slot.addEventListener("click", () => {
                 if (slot.classList.contains("disabled")) return;
 
                 timeSlots.forEach(s => s.classList.remove("selected"));
-
                 slot.classList.add("selected");
+
                 selectedTime = slot.dataset.time;
                 updateSelectedInfo();
             });
-            ;
         });
 
-        // === Display Selection ===
+        // === Display Selection Info ===
         function updateSelectedInfo() {
             const info = document.getElementById("selectedInfo");
+
             if (selectedDate) localStorage.setItem("bookingDate", selectedDate);
             if (selectedTime) localStorage.setItem("bookingTime", selectedTime);
 
@@ -428,27 +404,23 @@ $email = $_SESSION['email'] ?? '';
                 info.textContent = `Selected: ${selectedDate} at ${selectedTime}`;
             else if (selectedDate)
                 info.textContent = `Selected date: ${selectedDate}`;
-            else if (selectedTime)
-                info.textContent = `Selected time: ${selectedTime}`;
             else
                 info.textContent = "No date/time selected";
         }
 
-        // === Continue Button Logic ===
+        // Continue Button
         document.getElementById("continueBtn").addEventListener("click", () => {
             if (!selectedDate || !selectedTime) {
-                alert("Please select both a date and time to continue.");
+                alert("Please select both a date and time to proceed.");
                 return;
             }
-            localStorage.setItem("bookingDate", selectedDate);
-            localStorage.setItem("bookingTime", selectedTime);
+
             window.location.href = "confirmation.php";
         });
 
-        // Load booked slots initially
         loadBookedSlots();
-
     </script>
+
 
 
 </body>
