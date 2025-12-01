@@ -303,7 +303,13 @@ $appointments = $conn->query("
                         <p><strong>Experience:</strong> {$experience} years</p>
                         <p><strong>Status:</strong> " . ucfirst($status) . "</p>
                     </div>
-                    <button class='remove-btn' data-id='{$barberId}' style='margin-top:10px; padding:8px 12px; background:#c0392b; color:#fff; border:none; border-radius:6px; cursor:pointer;'>Remove</button>
+                    <div style='display:flex; gap:10px; margin-top:10px;'>
+                        <a href='edit_barber.php?id={$barberId}'  class='edit-btn'  style='padding:8px 12px; background:#2980b9; color:#fff; border:none; border-radius:6px; text-decoration:none;'>Edit</a>
+
+                     <button class='remove-btn' data-id='{$barberId}'  style='padding:8px 12px; background:#c0392b; color:#fff; border:none; border-radius:6px; cursor:pointer;'>Remove</button>
+                    </div>
+
+                    
                 </div>";
                     }
                 } else {

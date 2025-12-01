@@ -31,6 +31,12 @@ if ($booking_time === false) {
     die("Invalid time format.");
 }
 
+/* ---------------------------
+   REMINDER TIME CALCULATION
+----------------------------*/
+$reminder_time = date("Y-m-d H:i:s", strtotime("$booking_date $booking_time -1 hour"));
+
+
 // === Resolve barber_id from barber_name if not provided ===
 if (!$barber_id && $barber_name !== '') {
     $q = $conn->prepare("SELECT id FROM barbers WHERE name = ? LIMIT 1");
@@ -60,25 +66,28 @@ if ($barber_id) {
 
 $stmt->execute();
 $stmt->store_result();
+
 if ($stmt->num_rows > 0) {
     $stmt->close();
     die("Sorry! This slot is already booked. Please choose another time.");
 }
 $stmt->close();
 
+
 // === Insert the booking ===
-// Always prefer barber_id if available. Only fall back to barber_name.
 $status = 'Waiting for Confirmation';
 $payment_status = 'Paid';
 
 if ($barber_id) {
-    // Normal case: we have barber_id → store both, barber_name optional but nice for display
+    // Normal case: we have barber_id → store both
     $sql = "INSERT INTO bookings 
-            (user_id, service_name, barber_id, barber_name, booking_date, booking_time, status, payment_amount, payment_status)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            (user_id, service_name, barber_id, barber_name, booking_date, booking_time, status, payment_amount, payment_status, reminder_time)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
     $stmt = $conn->prepare($sql);
+
     $stmt->bind_param(
-        "isissssds",
+        "isissssdss",
         $user_id,
         $service_name,
         $barber_id,
@@ -87,16 +96,20 @@ if ($barber_id) {
         $booking_time,
         $status,
         $payment_amount,
-        $payment_status
+        $payment_status,
+        $reminder_time
     );
+
 } else {
-    // Rare fallback: no barber_id found → store only barber_name, barber_id = NULL
+    // Fallback: no barber_id found → store only name
     $sql = "INSERT INTO bookings 
-            (user_id, service_name, barber_id, barber_name, booking_date, booking_time, status, payment_amount, payment_status)
-            VALUES (?, ?, NULL, ?, ?, ?, ?, ?, ?)";
+            (user_id, service_name, barber_id, barber_name, booking_date, booking_time, status, payment_amount, payment_status, reminder_time)
+            VALUES (?, ?, NULL, ?, ?, ?, ?, ?, ?, ?)";
+
     $stmt = $conn->prepare($sql);
+
     $stmt->bind_param(
-        "isssssdss",
+        "isssss dsss",
         $user_id,
         $service_name,
         $barber_name,
@@ -104,7 +117,8 @@ if ($barber_id) {
         $booking_time,
         $status,
         $payment_amount,
-        $payment_status
+        $payment_status,
+        $reminder_time
     );
 }
 
