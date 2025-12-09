@@ -299,6 +299,31 @@ $email = $_SESSION['email'] ?? '';
             summary.textContent = "Booking details missing. Please go back and select again.";
         }
 
+
+        document.getElementById("confirmationForm").addEventListener("submit", function (e) {
+            const phone = document.getElementById("phone").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const fullname = document.getElementById("fullname").value.trim();
+
+            // Phone validation (must start with 97 or 98 and have 10 digits)
+            const phonePattern = /^(97|98)\d{8}$/;
+            if (!phonePattern.test(phone)) {
+                alert("Phone number must start with 97 or 98 and be 10 digits long.");
+                e.preventDefault();
+                return;
+            }
+
+            // Email validation (email must not start with a number)
+            const emailPattern = /^[A-Za-z][A-Za-z0-9._%+-]*@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+            if (!emailPattern.test(email)) {
+                alert("Email cannot start with a number. Please enter a valid email.");
+                e.preventDefault();
+                return;
+            }
+
+        });
+
+
         // Fill hidden inputs for form submission
         document.getElementById("service_name").value = service;
         document.getElementById("barber_name").value = barber;

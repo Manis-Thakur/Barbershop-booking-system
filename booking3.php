@@ -206,7 +206,7 @@ $email = $_SESSION['email'] ?? '';
             display: flex;
             justify-content: space-between;
             padding: 0 20%;
-            margin-top: 30px;
+            margin-top: 15px;
         }
 
         .buttons a {

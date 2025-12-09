@@ -246,7 +246,7 @@ content_cut
     </div>
   <div class="appointment-right">
     <span class="status">${app.status}</span>
-    <div class="price">₹${app.payment_amount}</div>
+    <div class="price">Rs${app.payment_amount}</div>
 
     ${app.status === "Confirmed" || app.status === "Pending"
                             ? `<button class="cancel-btn" onclick="cancelBooking(${app.id})">Cancel</button>`

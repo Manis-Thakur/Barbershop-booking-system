@@ -127,6 +127,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </section>
     </div>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const form = document.querySelector(".add-form");
+
+            form.addEventListener("submit", function (e) {
+
+                const email = form.email.value.trim();
+                const phone = form.phone.value.trim();
+
+                const emailRegex = /^[A-Za-z][A-Za-z0-9._%+-]*@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+                const phoneRegex = /^(98|97)[0-9]{8}$/;
+
+                let errors = [];
+
+
+                if (!emailRegex.test(email)) {
+                    errors.push("Invalid email format.");
+                }
+                if (!phoneRegex.test(phone)) {
+                    errors.push("Phone must start with 98 or 97 and be exactly 10 digits.");
+                }
+
+                if (errors.length > 0) {
+                    e.preventDefault();
+                    alert(errors.join("\n"));
+                }
+            });
+        });
+    </script>
+
+
 
 
 </body>
