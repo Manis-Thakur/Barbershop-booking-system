@@ -3,7 +3,7 @@ session_start();
 
 // Optional: Protect page — only logged-in users can confirm booking
 if (!isset($_SESSION['user_id'])) {
-    header("Location: signin.html");
+    header("Location: login.html");
     exit();
 }
 

@@ -41,6 +41,8 @@ if ($stmt->execute()) {
     // Optional: Auto-login after signup
     $_SESSION['user_id'] = $stmt->insert_id;
     $_SESSION['fullname'] = $fullname;
+    $_SESSION['email'] = $email;
+    $_SESSION['phone'] = $phone;
     header("Location: index.php");
     exit();
 } else {
